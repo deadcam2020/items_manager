@@ -36,6 +36,8 @@ export const ProfileUpdatePage = () => {
 
         if (isUpdateuserValid) {
             navigate('/profile')
+            toast.success('Datos actualizados')
+
         } else {
             toast.error('Error al actualizar los datos')
         }
@@ -67,7 +69,7 @@ export const ProfileUpdatePage = () => {
                             <p className='font-semibold'>Nombres</p>
                             <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
                                 <input
-
+                                    defaultValue={user.name}
                                     type="text"
                                     name='name'
                                     className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
@@ -80,6 +82,8 @@ export const ProfileUpdatePage = () => {
                             <p className='font-semibold'>Correo Electronico</p>
                             <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
                                 <input
+                                    defaultValue={user.email}
+
                                     type="email"
                                     name='email'
                                     className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
@@ -93,6 +97,8 @@ export const ProfileUpdatePage = () => {
                             <p className='font-semibold'>N. de documento</p>
                             <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
                                 <input
+                                    defaultValue={user.document}
+
                                     type="text"
                                     name='document'
                                     className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
@@ -107,6 +113,8 @@ export const ProfileUpdatePage = () => {
                             <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
 
                                 <input type="text"
+                                    defaultValue={user.phone}
+
                                     name='phone'
                                     className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
                                 />
@@ -118,6 +126,8 @@ export const ProfileUpdatePage = () => {
                             <p className='font-semibold'>Dirección</p>
                             <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
                                 <input type="text"
+                                    defaultValue={user.adress}
+
                                     name='adress'
                                     className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
                                 />
@@ -149,7 +159,7 @@ export const ProfileUpdatePage = () => {
 
                         <button
                             type='submit'
-                            className='absolute bg-primary right-4 text-white py-2 px-4 rounded-full mt-8 cursor-pointer z-10'>
+                            className='absolute bg-primary right-4 text-white py-2 px-4 rounded-full mt-8 cursor-pointer hover:bg-blue-600 z-10'>
                             Guardar
                         </button>
 

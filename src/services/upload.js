@@ -1,28 +1,32 @@
 const BASE_URL = import.meta.env.VITE_API_URL
 
 
-export const uploadImageAction = async (image) => {
+export async function uploadProfileImageAction(file) {
   try {
-    const response = await fetch(`${BASE_URL}/api/upload/postImage`, {
+    const formData = new FormData();
+    formData.append('profileImage', file); // 👈 usa el mismo nombre que en el backend
+
+    const token = localStorage.getItem('token');
+    
+
+    const res = await fetch(`${BASE_URL}/api/upload/profileImage`, {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Authorization': `Bearer ${token}`, 
+      },
+      body: formData,
     });
 
-    if (!response.ok) {
-      throw new Error('Credenciales inválidas');
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Error al subir la imagen');
     }
 
-    const data = await response.json();
-
-    // Extraemos el token y el resto de los datos del usuario
-    const { token, ...user } = data;
-    //console.log('data login:', token , user);
-
-    return { token, user };
-
+    const resultJson = await res.json();
+    return resultJson;
   } catch (error) {
-    console.error('Error en loginAction:', error);
+    console.error('Error en uploadProfileImageAction:', error);
     throw error;
   }
-};
+}
+

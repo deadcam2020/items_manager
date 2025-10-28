@@ -1,7 +1,8 @@
-import { loginAction, updateUserAction } from '@/services/auth';
+import { loginAction, updateUserAction} from '@/services/auth';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { checkAuthAction } from '../actions/check-auth.action.js';
+import { uploadProfileImageAction } from '@/services/upload.js';
 
 export const useAuthStore = create(
   persist(
@@ -79,6 +80,26 @@ export const useAuthStore = create(
           return false;
         }
       },
+
+      updateProfileImage: async (file) => {
+        try {
+
+          const updatedImage = await uploadProfileImageAction(file)
+
+          set((state) => ({
+            user: { ...state.user, ...updatedImage },
+          }));
+          return true
+
+        } catch (error) {
+          console.error('Error subiendo foto', error);
+          return false;
+        }
+      },
+
+
+      //siguiente función
+
     }),
     {
       name: 'auth-storage', // nombre en localStorage
@@ -87,6 +108,6 @@ export const useAuthStore = create(
         token: state.token,
         authStatus: state.authStatus,
       }),
-    }
+    },
   )
 );

@@ -20,7 +20,7 @@ export const Sidebar = () => {
                 {/* profile */}
                 <div className='flex flex-col not-visited:items-center justify-center p-8  gap-2 h-[30vh] cursor-pointer'
                 >
-                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    <img src={user.imageurl}
                         className='w-15 h-15 rounded-full objet-cover'
                         alt="" />
 
