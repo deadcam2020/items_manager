@@ -2,6 +2,7 @@ import React, { use } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AiOutlineHome } from "react-icons/ai";
+import { MdOutlinePersonSearch } from "react-icons/md";
 import { RiMore2Fill, RiCloseFill, RiUpload2Line } from "react-icons/ri";
 import { useAuthStore } from '../store/auth.store';
 
@@ -49,7 +50,16 @@ export const Sidebar = () => {
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
                             >
 
-                                <RiUpload2Line /> Upload
+                                <RiUpload2Line /> Subir productos
+                            </Link>
+
+
+                            <Link
+                                to='/myproducts'
+                                className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
+                            >
+
+                                <MdOutlinePersonSearch /> My products
                             </Link>
 
                             <div className="flex flex-col gap-2 mt-4 md:hidden">

@@ -20,6 +20,8 @@ import {
   NotAuthenticatedRoute,
   AdminRoute,
 } from "@/auth/components/routes/ProtectedRoutes";
+import MyProductsPage from "@/items/pages/MyProductsPage";
+import ProductPage from "@/items/pages/ProductPage";
 
 export const appRouter = createBrowserRouter([
   // public routes
@@ -51,6 +53,10 @@ export const appRouter = createBrowserRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "profile/update", element: <ProfileUpdatePage /> },
       { path: "upload", element: <UploadPage /> },
+      { path: "myproducts", element: <MyProductsPage/> },
+      { path: "product/:id", element: <ProductPage/> }
+
+
     ],
   },
 
