@@ -3,6 +3,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Evitar que Chrome cambie los estilos al autocompletar */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #1f2937 inset !important; /* mismo color que tu bg-gray-800 */
+  -webkit-text-fill-color: white !important; /* color del texto */
+  caret-color: white; /* color del cursor */
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

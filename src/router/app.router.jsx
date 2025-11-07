@@ -22,6 +22,7 @@ import {
 } from "@/auth/components/routes/ProtectedRoutes";
 import MyProductsPage from "@/items/pages/MyProductsPage";
 import ProductPage from "@/items/pages/ProductPage";
+import { UpdateProductPage } from "@/items/pages/UpdateProductPage";
 
 export const appRouter = createBrowserRouter([
   // public routes
@@ -54,7 +55,9 @@ export const appRouter = createBrowserRouter([
       { path: "profile/update", element: <ProfileUpdatePage /> },
       { path: "upload", element: <UploadPage /> },
       { path: "myproducts", element: <MyProductsPage/> },
-      { path: "product/:id", element: <ProductPage/> }
+      { path: "product/:id", element: <ProductPage/> },
+      { path: "/product/updateProduct/:id", element: <UpdateProductPage/> }
+
 
 
     ],
