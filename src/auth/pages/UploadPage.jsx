@@ -4,6 +4,7 @@ import { MdAttachMoney } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { useProductStore } from '@/items/store/products.store';
 import { toast } from 'sonner';
+import { useAuthStore } from '../store/auth.store';
 
 
 
@@ -13,6 +14,7 @@ export const UploadPage = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRef = useRef(null);
     const { uploadProduct, loading } = useProductStore()
+    const {user} = useAuthStore()
 
 
 
@@ -41,13 +43,16 @@ export const UploadPage = () => {
             description: formData.get("description"),
             price: parseFloat(formData.get("price")),
             category: formData.get("category"),
+            stock: parseInt(formData.get("stock")),
+            seller: user.name,
         }
 
+        
         const ok = await uploadProduct(producData, file)
 
         if (ok) {
             toast.success('El producto se ha guardado')
-            navigate('/profile');
+            navigate('/myproducts');
         } else {
             toast.error('Error al guardar producto')
         }
@@ -116,6 +121,19 @@ export const UploadPage = () => {
                         </div>
                     </div>
 
+                    
+                    <div className="w-1/3 flex flex-col gap-2">
+                        <label className="font-semibold">Stock</label>
+                        <div className="flex items-center bg-gray-300 p-2 rounded-xl border-2 hover:border-primary">
+                            <input
+                                name="stock"
+                                type="number"
+                                className="bg-transparent border-0 w-full outline-none"
+                                required
+                            />
+                        </div>
+                    </div>
+
                     <div className="w-1/3 flex flex-col gap-2">
                         <label className="font-semibold">Categoría</label>
                         <input
@@ -129,7 +147,7 @@ export const UploadPage = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="bg-primary text-white py-2 px-4 rounded-full mt-8 hover:font-semibold hover:border-2 hover:bg-blue-600 hover:border-primary text-sm self-end"
+                        className="bg-primary text-white py-2 px-4 rounded-full mt-8 hover:font-semibold hover:border-2 hover:bg-blue-600 hover:border-blue-600 text-sm self-end"
                     >
                         {loading ? "Subiendo..." : "Subir producto"}
                     </button>

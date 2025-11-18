@@ -63,7 +63,7 @@ export async function uploadProductImageAction(file) {
 
 export const createProductAction = async (finalProduct) => {
 
-  const { title, description, price, category, imageurl, imageid } = finalProduct
+  const { title, description, price, category, imageurl, imageid, seller, stock } = finalProduct
   const token = localStorage.getItem('token');
 
 
@@ -75,7 +75,7 @@ export const createProductAction = async (finalProduct) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify({ title, description, price, category, imageurl, imageid }),
+      body: JSON.stringify({ title, description, price, category, imageurl, imageid, seller, stock }),
     })
 
     if (!res) throw new Error;

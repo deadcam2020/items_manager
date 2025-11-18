@@ -19,16 +19,19 @@ export const Sidebar = () => {
 
 
                 {/* profile */}
-                <div className='flex flex-col not-visited:items-center justify-center p-8  gap-2 h-[30vh] cursor-pointer'
+                <div
+                    onClick={() => setShowMenu(false)}
+                    className='flex flex-col not-visited:items-center justify-center p-8  gap-2 h-[30vh] cursor-pointer'
                 >
                     <img src={user.imageurl}
                         className='w-15 h-15 rounded-full objet-cover'
                         alt="" />
 
-                    <p 
-                    onClick={() => navigate("/profile")}
-
-                    className='text-white font-bold text-xl hover:text-primary '>{user?.name}</p>
+                    <p
+                        onClick={() => navigate("/profile")
+                        }
+                        className='text-white font-bold text-xl hover:text-primary '>{user?.name}
+                    </p>
                 </div>
 
                 <div className="bg-[#16006c] p-8 rounded-tr-[100px] h-[70vh] flex flex-col justify-between gap-8 ">
@@ -39,6 +42,7 @@ export const Sidebar = () => {
 
                             <Link
                                 to='/'
+                                onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
                             >
 
@@ -47,6 +51,7 @@ export const Sidebar = () => {
 
                             <Link
                                 to='/upload'
+                                onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
                             >
 
@@ -56,13 +61,16 @@ export const Sidebar = () => {
 
                             <Link
                                 to='/myproducts'
+                                onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
                             >
 
                                 <MdOutlinePersonSearch /> My products
                             </Link>
 
-                            <div className="flex flex-col gap-2 mt-4 md:hidden">
+                            <div
+                                onClick={() => setShowMenu(false)}
+                                className="flex flex-col gap-2 mt-4 md:hidden">
                                 {authStatus === 'not-authenticated' ? (
                                     <Link to='/login'>
                                         <button className="bg-blue-500 p-1 rounded-sm border border-blue-950 text-white w-full">

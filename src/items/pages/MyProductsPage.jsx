@@ -37,7 +37,9 @@ const MyProductsPage = () => {
     const confirmed = confirm("¿Estás seguro de que quieres eliminar este producto?");
     if (!confirmed) return;
 
+
     const ok = await deleteProduct(id);
+
 
     if (!ok) {
       toast.error("No se pudo eliminar este producto");
@@ -52,47 +54,65 @@ const MyProductsPage = () => {
 
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 overflow-y-auto  min-h-screen">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
+
       {products.map((product) => (
         <div
-          onClick={() => { navigate(`/product/${product.id}`) }}
+          onClick={() => navigate(`/product/${product.id}`)}
           key={product.id}
-          className="flex flex-col w-full max-w-xs h-auto p-2 rounded-xl gap-2 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+          className="
+        flex flex-col justify-between     /* Mantiene botones abajo */
+    w-full
+    p-2 rounded-xl gap-2
+    bg-white shadow-sm
+    hover:shadow-md transition-shadow duration-200
+    min-h-[280px]  
+      "
         >
           <img
-            className="w-full h-40 object-cover rounded-lg"
-            src={product.imageurl || "https://i.imgur.com/EJLFNOw.png"}
+            className="w-full h-32 md:h-40 object-cover rounded-lg"
+            src={product.imageurl || 'https://i.imgur.com/EJLFNOw.png'}
             alt={product.title}
           />
-          <div className="p-1 flex flex-col">
-            <p className="text-m font-medium break-words">{product.title}</p>
-            <p className="text-sm text-gray-500 line-clamp-2">{product.description}</p>
-            <p className="text-lg font-bold text-primary mt-1">${product.price}</p>
+
+          <div className="flex flex-col justify-between flex-1">
+
+            {/* Título máximo 2 líneas */}
+            <p className="text-sm md:text-base font-medium line-clamp-2">
+              {product.title}
+            </p>
+
+
+
+            {/* Precio más destacado */}
+            <p className="text-base md:text-lg font-bold text-primary mt-1">
+              ${product.price} COP
+            </p>
+
+            <div className="p-1 flex flex-row gap-1" >
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); //  evita que el click suba al div
+                  handleDeleteProduct(product.id);
+                }}
+                className="bg-red-500 p-1 rounded-sm border border-red-500 text-white hover:font-bold cursor-pointer "
+              >
+                Eliminar
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // evita que se dispare el onClick del contenedor padre
+                  navigate(`/product/updateProduct/${product.id}`);
+                }}
+                className="bg-primary p-1 rounded-sm text-white hover:font-bold cursor-pointer"
+              >
+                Editar
+              </button>
+            </div>
+
           </div>
-
-          <div className="p-1 flex flex-row gap-1" >
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation(); // 🚫 evita que el click suba al div
-                handleDeleteProduct(product.id);
-              }}
-              className="bg-red-500 p-1 rounded-sm border border-red-500 text-white hover:font-bold cursor-pointer "
-            >
-              Eliminar
-            </button>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation(); // evita que se dispare el onClick del contenedor padre
-                navigate(`/product/updateProduct/${product.id}`);
-              }}
-              className="bg-primary p-1 rounded-sm text-white hover:font-bold cursor-pointer"
-            >
-              Editar
-            </button>
-          </div>
-
         </div>
       ))}
     </div>

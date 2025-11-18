@@ -34,7 +34,7 @@ export const fetchGetProductAction = async (id) => {
       throw new Error('Error en fetchGetProductAction');
     }
 
-    return await response.json();
+    return response.json();
 };
 
 export const deleteProductAction = async (id) => {
@@ -57,8 +57,13 @@ export const deleteProductAction = async (id) => {
 };
 
 
-export const updateProductAction = async ({ id, productData }) => {
+export const updateProductAction = async ({ id, productData, oldImageId }) => {
   const token = localStorage.getItem('token');
+
+  const body = {
+    ...productData,
+    oldImageId   // <-- aquí va el public_id anterior
+  };
 
   try {
     const res = await fetch(`${BASE_URL}/api/products/update/${id}`, {
@@ -67,7 +72,7 @@ export const updateProductAction = async ({ id, productData }) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify(productData),
+      body: JSON.stringify(body),
     });
 
     if (!res.ok) {
@@ -75,8 +80,7 @@ export const updateProductAction = async ({ id, productData }) => {
       throw new Error(errorData.error || 'Error al actualizar producto');
     }
 
-    const updatedProduct = await res.json();
-    return updatedProduct;
+    return await res.json();
   } catch (error) {
     console.error('Error en updateProductAction:', error);
     throw error;
@@ -84,5 +88,18 @@ export const updateProductAction = async ({ id, productData }) => {
 };
 
 
+export const fetchGetAllProductsAction = async () => {
+
+
+    const response = await fetch(`${BASE_URL}/api/products/products`, {
+      method: 'GET'
+   });
+
+    if (!response.ok) {
+      throw new Error('Error en fetchGetProductAction');
+    }
+
+    return await response.json();
+};
 
 

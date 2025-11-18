@@ -28,6 +28,8 @@ export const UpdateProductPage = () => {
                         description: data.description,
                         price: data.price,
                         imageurl: data.imageurl,
+                        oldimageid: data.imageid,
+
                         category: data.category,
                     });
                 }
@@ -69,12 +71,12 @@ export const UpdateProductPage = () => {
         if (productData.price) {
             productData.price = parseFloat(productData.price);
         }
-
+        
         let isUpdatedProductValid;
         if (!file) {
              isUpdatedProductValid = await updateProductWithoutImage({ id, productData })
         } else {
-             isUpdatedProductValid = await updateProductWithImage({ id, productData, file })
+             isUpdatedProductValid = await updateProductWithImage({ id, productData, file, oldImageId: product.oldimageid })
 
         }
 
@@ -86,9 +88,6 @@ export const UpdateProductPage = () => {
         } else {
             toast.error('Error al actualizar los datos')
         }
-
-
-        return console.log('Actualizando...', productData);
 
     }
 
@@ -177,7 +176,7 @@ export const UpdateProductPage = () => {
                         disabled={loading}
                         className="bg-primary text-white py-2 px-4 rounded-full mt-8 hover:font-semibold hover:border-2 hover:bg-blue-600 hover:border-primary text-sm self-end"
                     >
-                        {loading ? "Subiendo..." : "Subir producto"}
+                        {loading ? "Subiendo..." : "Actualizar producto"}
                     </button>
                 </form>
             </main>
