@@ -1,6 +1,6 @@
 // src/store/product.store.js
 import { create } from "zustand";
-import { createProductAction, uploadProductImageAction } from "@/services/upload";
+import { createProductAction, createSaleAction, uploadProductImageAction } from "@/services/upload";
 import { deleteProductAction, fetchGetAllProductsAction, fetchGetProductAction, fetchUserProductsAction, updateProductAction } from "@/services/products";
 
 export const useProductStore = create((set) => ({
@@ -158,6 +158,28 @@ export const useProductStore = create((set) => ({
       return true;
     } catch (err) {
       console.error("Error uploading product:", err);
+      set({ error: err.message, loading: false });
+      return false;
+    }
+  },
+
+    saveSale: async (saleData) => {
+    try {
+      set({ loading: true, error: null });
+
+
+
+      //  Crear producto en la base de datos
+      const newSale = await createSaleAction(saleData);
+
+      set((state) => ({
+        
+        loading: false,
+      }));
+
+      return true;
+    } catch (err) {
+      console.error("Error saving Sale:", err);
       set({ error: err.message, loading: false });
       return false;
     }

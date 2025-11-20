@@ -81,10 +81,12 @@ export const useAuthStore = create(
         }
       },
 
-      updateProfileImage: async (file) => {
+      updateProfileImage: async ({file, oldProfileImageId}) => {
+
+        
         try {
 
-          const updatedImage = await uploadProfileImageAction(file)
+          const updatedImage = await uploadProfileImageAction({file, oldProfileImageId})
 
           set((state) => ({
             user: { ...state.user, ...updatedImage },

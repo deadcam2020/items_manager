@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
 import { toast } from 'sonner';
 
-
 const departamentosColombia = [
     "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bolívar", "Boyacá",
     "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba",
@@ -15,108 +14,95 @@ const departamentosColombia = [
 
 export const ProfileUpdatePage = () => {
     const navigate = useNavigate();
-
     const { updateUser, user } = useAuthStore();
-    const [departamento, setDepartamento] = useState("");
+
+    const [departamento, setDepartamento] = useState(user.department || "");
+    const [paymentMethod, setPaymentMethod] = useState(user.payment_method || "cash");
+    const [paymentAccount, setPaymentAccount] = useState(user.payment_account || "");
 
     const handleUpdateUser = async (event) => {
         event.preventDefault();
 
         const formData = new FormData(event.target);
-
         const rawData = Object.fromEntries(formData.entries());
 
-
+        // eliminar valores vacíos
         const userData = Object.fromEntries(
             Object.entries(rawData).filter(([_, value]) => value?.trim() !== '')
         );
 
-
-        const isUpdateuserValid = await updateUser(userData)
-
-        if (isUpdateuserValid) {
-            navigate('/profile')
-            toast.success('Datos actualizados')
-
-        } else {
-            toast.error('Error al actualizar los datos')
+        // Si selecciona efectivo, no mandar cuenta
+        if (userData.payment_method === "cash") {
+            userData.payment_account = null;
         }
 
+        const isUpdateValid = await updateUser(userData);
 
-        return console.log('Actualizando...', userData);
-
+        if (isUpdateValid) {
+            navigate('/profile');
+            toast.success('Datos actualizados');
+        } else {
+            toast.error('Error al actualizar los datos');
+        }
     }
-
 
     return (
         <>
-
             <div className="grid lg:grid-cols-4 xl:grid-cols-6 min-h-screen relative ">
-                <main className="lg:col-span-3 xl:col-span-5 bg-gray-100 p-8 min-h-screen relative  ">
-                    <h1 className="text-2xl md:text-3xl font-bold"> Actualiza tus datos  </h1>
+                <main className="lg:col-span-3 xl:col-span-5 bg-gray-100 p-8 min-h-screen relative">
+                    <h1 className="text-2xl md:text-3xl font-bold"> Actualiza tus datos </h1>
                     <div className='w-full mt-4 h-1 bg-primary'></div>
 
-                    {/* Datos del cliente */}
-
-
-                    <form
-                        onSubmit={handleUpdateUser}
-                    >
-
-
+                    <form onSubmit={handleUpdateUser}>
+                        
                         {/* Nombres */}
                         <div className='w-1/3 flex flex-col gap-2 mt-5'>
                             <p className='font-semibold'>Nombres</p>
-                            <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
+                            <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
                                 <input
                                     defaultValue={user.name}
                                     type="text"
                                     name='name'
-                                    className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
+                                    className='bg-transparent w-full outline-none'
                                 />
                             </div>
                         </div>
 
-                        {/* Correo Electronico */}
+                        {/* Correo */}
                         <div className='w-1/3 flex flex-col gap-2 mt-5'>
-                            <p className='font-semibold'>Correo Electronico</p>
-                            <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
+                            <p className='font-semibold'>Correo Electrónico</p>
+                            <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
                                 <input
                                     defaultValue={user.email}
-
                                     type="email"
                                     name='email'
-                                    className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
+                                    className='bg-transparent w-full outline-none'
                                 />
                             </div>
                         </div>
 
-                        {/* N. de documento */}
+                        {/* Documento */}
                         <div className='w-1/3 flex flex-col gap-2 mt-5'>
-
                             <p className='font-semibold'>N. de documento</p>
-                            <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
+                            <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
                                 <input
                                     defaultValue={user.document}
-
                                     type="text"
                                     name='document'
-                                    className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
+                                    className='bg-transparent w-full outline-none'
                                 />
                             </div>
                         </div>
 
-
-                        {/* N. de telefono */}
+                        {/* Teléfono */}
                         <div className='w-1/3 flex flex-col gap-2 mt-5'>
                             <p className='font-semibold'>Teléfono</p>
-                            <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
-
-                                <input type="text"
+                            <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
+                                <input
                                     defaultValue={user.phone}
-
+                                    type="text"
                                     name='phone'
-                                    className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
+                                    className='bg-transparent w-full outline-none'
                                 />
                             </div>
                         </div>
@@ -124,53 +110,80 @@ export const ProfileUpdatePage = () => {
                         {/* Dirección */}
                         <div className='w-1/3 flex flex-col gap-2 mt-5'>
                             <p className='font-semibold'>Dirección</p>
-                            <div className='w-full- flex items-center bg-gray-300 p-2 rounded-xl gap-2 border-2 hover:border-2 hover:border-primary'>
-                                <input type="text"
+                            <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
+                                <input
                                     defaultValue={user.adress}
-
+                                    type="text"
                                     name='adress'
-                                    className='bg-transparent border-0 w-full outline-none text-sm md:text-base '
+                                    className='bg-transparent w-full outline-none'
                                 />
                             </div>
                         </div>
 
-
-                        {/* Dirección país - departamento */}
+                        {/* Departamento */}
                         <div className='w-1/3 flex flex-col gap-2 mt-5'>
                             <p className='font-semibold'>Departamento</p>
-                            <div className='w-full flex items-center bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
-
+                            <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
                                 <select
-                                    value={departamento}
                                     name='department'
-                                    className='w-full bg-transparent outline-none text-sm md:text-base'
+                                    value={departamento}
                                     onChange={(e) => setDepartamento(e.target.value)}
+                                    className='w-full bg-transparent outline-none'
                                 >
-
                                     <option value="">Selecciona un departamento</option>
                                     {departamentosColombia.map((dep) => (
                                         <option key={dep} value={dep}>{dep}</option>
                                     ))}
-
                                 </select>
-
                             </div>
                         </div>
 
+                        {/* MÉTODO DE PAGO */}
+                        <div className='w-1/3 flex flex-col gap-2 mt-10'>
+                            <p className='font-semibold'>Método de pago</p>
+                            <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
+                                <select
+                                    name='payment_method'
+                                    value={paymentMethod}
+                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    className='w-full bg-transparent outline-none'
+                                >
+                                    <option value="cash">Efectivo</option>
+                                    <option value="nequi">Nequi</option>
+                                    <option value="bancolombia">Bancolombia</option>
+                                    <option value="card">Tarjeta</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* NÚMERO DE CUENTA / TARJETA */}
+                        {paymentMethod !== "cash" && (
+                            <div className='w-1/3 flex flex-col gap-2 mt-5'>
+                                <p className='font-semibold'>Número de cuenta / tarjeta</p>
+                                <div className='w-full bg-gray-300 p-2 rounded-xl border-2 hover:border-primary'>
+                                    <input
+                                        defaultValue={paymentAccount}
+                                        type="text"
+                                        name='payment_account'
+                                        className='bg-transparent w-full outline-none'
+                                        placeholder="Ej: 3001234567"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* BOTÓN GUARDAR */}
                         <button
                             type='submit'
-                            className='absolute bg-primary right-4 text-white py-2 px-4 rounded-full mt-8 cursor-pointer hover:bg-blue-600 z-10'>
+                            className='absolute bg-primary right-4 text-white py-2 px-4 rounded-full mt-8 cursor-pointer hover:bg-blue-600 z-10'
+                        >
                             Guardar
                         </button>
 
                     </form>
-
-
                 </main>
-
-
             </div>
         </>
     )
-
 }

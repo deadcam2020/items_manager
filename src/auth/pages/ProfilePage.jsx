@@ -26,7 +26,7 @@ export const ProfilePage = () => {
       return;
     }
 
-    const ok = await updateProfileImage(file);
+    const ok = await updateProfileImage({file, oldProfileImageId: user.imageid});
 
     if (ok) toast.success('Imagen subida correctamente');
     else toast.error('Error al subir imagen');
@@ -73,6 +73,10 @@ export const ProfilePage = () => {
           <InfoItem label="N. Celular" value={user.phone} />
           <InfoItem label="Dirección" value={user.adress} />
           <InfoItem label="Departamento" value={user.department} />
+          <InfoItem label="Método de pago" value={user.payment_method} />
+          <InfoItem label="# de cuenta" value={user.payment_account} />
+
+
         </div>
 
         <button
