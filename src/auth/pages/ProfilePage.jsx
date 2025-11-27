@@ -9,6 +9,11 @@ export const ProfilePage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
 
+  const maskLast3 = (value) => {
+  const str = String(value);
+  return '•'.repeat(str.length - 3) + str.slice(-3);
+};
+
   const handleImageClick = () => {
     fileInputRef.current.click();
   };
@@ -74,7 +79,7 @@ export const ProfilePage = () => {
           <InfoItem label="Dirección" value={user.adress} />
           <InfoItem label="Departamento" value={user.department} />
           <InfoItem label="Método de pago" value={user.payment_method} />
-          <InfoItem label="# de cuenta" value={user.payment_account} />
+          <InfoItem label="# de cuenta" value={maskLast3(user.payment_account)} />
 
 
         </div>

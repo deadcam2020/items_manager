@@ -29,8 +29,8 @@ export const UpdateProductPage = () => {
                         price: data.price,
                         imageurl: data.imageurl,
                         oldimageid: data.imageid,
-
                         category: data.category,
+                        stock: data.stock
                     });
                 }
             } catch (error) {
@@ -68,9 +68,9 @@ export const UpdateProductPage = () => {
             Object.entries(rawData).filter(([_, value]) => value?.trim() !== '')
         );
 
-        if (productData.price) {
             productData.price = parseFloat(productData.price);
-        }
+            productData.stock = parseFloat(productData.stock);
+
         
         let isUpdatedProductValid;
         if (!file) {
@@ -155,6 +155,21 @@ export const UpdateProductPage = () => {
                                 step="0.01"
                                 className="bg-transparent border-0 w-full outline-none"
                                 required
+                            />
+                        </div>
+                    </div>
+
+
+                       <div className="w-1/3 flex flex-col gap-2">
+                        <label className="font-semibold">Stock</label>
+                        <div className="flex items-center bg-gray-300 p-2 rounded-xl border-2 hover:border-primary">
+                            <input
+                                defaultValue={product.stock}
+
+                                name="stock"
+                                type="number"
+                                className="bg-transparent border-0 w-full outline-none"
+                              
                             />
                         </div>
                     </div>

@@ -1,11 +1,26 @@
 // src/store/product.store.js
 import { create } from "zustand";
-import { createProductAction, createSaleAction, uploadProductImageAction } from "@/services/upload";
-import { deleteProductAction, fetchGetAllProductsAction, fetchGetProductAction, fetchUserProductsAction, updateProductAction } from "@/services/products";
+import {
+  createProductAction,
+  createSaleAction,
+  uploadProductImageAction
+} from "@/services/upload";
+
+import {
+  deleteProductAction,
+  fetchGetAllProductsAction,
+  fetchGetProductAction,
+  fetchUserProductsAction,
+  fetchUserPurchasedProductsAction,
+  updateProductAction
+} from "@/services/products";
+
+
 
 export const useProductStore = create((set) => ({
   products: [],
-  productRes: [], //para almacenar el producto que se busca por id
+  productRes: [],//para almacenar el producto que se busca por id
+  purchasedProducts: [],
   loading: false,
   error: null,
 
@@ -72,14 +87,12 @@ export const useProductStore = create((set) => ({
   },
 
 
-    fetchGetAllProducts: async () => {
+  fetchGetAllProducts: async (id) => {
     set({ loading: true })
 
     try {
 
-      const response = await fetchGetAllProductsAction()
-
-
+      const response = await fetchGetAllProductsAction(id)
 
       set({ products: response, loading: false })
 
@@ -110,7 +123,7 @@ export const useProductStore = create((set) => ({
     }
   },
 
-  updateProductWithImage: async ({id, productData, file, oldImageId}) => {
+  updateProductWithImage: async ({ id, productData, file, oldImageId }) => {
     try {
       set({ loading: true, error: null });
 
@@ -124,7 +137,7 @@ export const useProductStore = create((set) => ({
       };
 
       //  Crear producto en la base de datos
-      const newProduct = await updateProductAction({id, productData: finalProduct, oldImageId});
+      const newProduct = await updateProductAction({ id, productData: finalProduct, oldImageId });
 
       //  Actualizar el estado global
       set((state) => ({
@@ -142,11 +155,13 @@ export const useProductStore = create((set) => ({
   },
 
 
-    updateProductWithoutImage: async ({id, productData}) => {
+  updateProductWithoutImage: async ({ id, productData }) => {
+    console.log(productData.stock);
+    
     try {
       set({ loading: true, error: null });
       //  Crear producto en la base de datos
-      const newProduct = await updateProductAction({id, productData});
+      const newProduct = await updateProductAction({ id, productData });
 
       //  Actualizar el estado global
       set((state) => ({
@@ -163,7 +178,7 @@ export const useProductStore = create((set) => ({
     }
   },
 
-    saveSale: async (saleData) => {
+  saveSale: async (saleData) => {
     try {
       set({ loading: true, error: null });
 
@@ -173,7 +188,7 @@ export const useProductStore = create((set) => ({
       const newSale = await createSaleAction(saleData);
 
       set((state) => ({
-        
+
         loading: false,
       }));
 
@@ -185,6 +200,23 @@ export const useProductStore = create((set) => ({
     }
   },
 
+
+  fetchUserPurchasedProducts: async (buyer_id) => {
+    set({ loading: true })
+
+    try {
+
+      const response = await fetchUserPurchasedProductsAction(buyer_id)
+
+      set({ purchasedProducts: response, loading: false })
+      return true
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      set({ loading: false, error: error.message });
+      return false
+
+    }
+  },
 
 
 }));

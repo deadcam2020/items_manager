@@ -102,7 +102,6 @@ export const createProductAction = async (finalProduct) => {
 export const createSaleAction = async (saleData) => {
 
   const token = localStorage.getItem('token');
-  console.log("Data : ",saleData);
   
   try {
 

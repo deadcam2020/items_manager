@@ -58,7 +58,7 @@ const MyProductsPage = () => {
 
       {products.map((product) => (
         <div
-          onClick={() => navigate(`/product/${product.id}`)}
+          onClick={() => navigate(`/product/updateProduct/${product.id}`)}
           key={product.id}
           className="
         flex flex-col justify-between     /* Mantiene botones abajo */

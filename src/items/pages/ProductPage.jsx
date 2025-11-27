@@ -19,10 +19,11 @@ const ProductPage = () => {
             title: data.title,
             description: data.description,
             price: data.price,
-            imageUrl: data.imageurl,
+            imageurl: data.imageurl,
             category: data.category,
             seller: data.seller,
-            uid: data.uid
+            uid: data.uid,
+            stock: data.stock
           });
         }
       } catch (error) {
@@ -43,9 +44,10 @@ const ProductPage = () => {
       state: {
         productId: product.id,
         seller_id: product.uid,
+        seller: product.seller,
         title: product.title,
         price: product.price,
-        imageUrl: product.imageUrl,
+        imageurl: product.imageurl,
         quantity,
       },
     });
@@ -62,7 +64,7 @@ const ProductPage = () => {
           {/* product image */}
           <div className="md:w-1/2 flex justify-center items-center">
             <img
-              src={product.imageUrl}
+              src={product.imageurl}
               alt={product.title}
               className="rounded-xl w-full max-w-md object-cover"
             />
@@ -89,6 +91,11 @@ const ProductPage = () => {
                 {product.seller}
               </p>
             </div>
+
+            <p>
+                <span className="font-semibold">Stock: </span>
+                {product.stock}
+              </p>
 
             {/* quantity selector */}
             <div className="mt-4">

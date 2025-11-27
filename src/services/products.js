@@ -59,6 +59,7 @@ export const deleteProductAction = async (id) => {
 
 export const updateProductAction = async ({ id, productData, oldImageId }) => {
   const token = localStorage.getItem('token');
+console.log("action: ", productData.stock);
 
   const body = {
     ...productData,
@@ -88,11 +89,14 @@ export const updateProductAction = async ({ id, productData, oldImageId }) => {
 };
 
 
-export const fetchGetAllProductsAction = async () => {
+export const fetchGetAllProductsAction = async (id) => {
+  const token = localStorage.getItem('token');
 
-
-    const response = await fetch(`${BASE_URL}/api/products/products`, {
-      method: 'GET'
+  const response = await fetch(`${BASE_URL}/api/products/products?id=${id}`, {
+      method: 'GET',
+        headers: {
+        'Authorization': `Bearer ${token}`,
+      },
    });
 
     if (!response.ok) {
@@ -103,3 +107,19 @@ export const fetchGetAllProductsAction = async () => {
 };
 
 
+export const fetchUserPurchasedProductsAction = async (buyer_id) => {
+
+    const token = localStorage.getItem('token')
+
+    const response = await fetch(`${BASE_URL}/api/users/myPurchases/${buyer_id}`, {
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Credenciales inválidas');
+    }
+
+    return await response.json();
+};

@@ -16,17 +16,19 @@ const {saveSale} = useProductStore()
     return null;
   }
 
-  const { productId, title, price, imageUrl, quantity, seller_id } = state;
+  const { productId, title, price, imageurl, quantity, seller_id, seller } = state;
 
   const total = price * quantity;
-
-
 
   const handlePurchase = async() => {
 
     const saleData =  {
         buyer_id: user.id,
+        title,
         seller_id,
+        imageurl,
+        seller_name: seller,
+        buyer_name: user.name,
         product_id: productId,
         unit_price: parseInt(price),
         quantity,
@@ -55,7 +57,7 @@ const {saveSale} = useProductStore()
         {/* Producto */}
         <div className="flex gap-4 items-center">
           <img
-            src={imageUrl}
+            src={imageurl}
             alt={title}
             className="w-24 h-24 rounded-lg object-cover shadow"
           />
