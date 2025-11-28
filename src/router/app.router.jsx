@@ -39,6 +39,7 @@ export const appRouter = createBrowserRouter([
       { index: true, element: <Navigate to="login" /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
+
     ],
   },
 
@@ -60,11 +61,8 @@ export const appRouter = createBrowserRouter([
       { path: "product/:id", element: <ProductPage/> },
       { path: "/product/updateProduct/:id", element: <UpdateProductPage/> },
       { path: "/product/buy", element: <BuyPage/> },
-      { path: "/purchasedProducts", element: <PurchasedPage/> }
-
-
-
-
+      { path: "/purchasedProducts", element: <PurchasedPage/> },
+      { path: "/search", element: <SearchPage/> }
 
     ],
   },

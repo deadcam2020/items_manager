@@ -12,6 +12,7 @@ import {
   fetchGetProductAction,
   fetchUserProductsAction,
   fetchUserPurchasedProductsAction,
+  searchproductsAction,
   updateProductAction
 } from "@/services/products";
 
@@ -217,6 +218,26 @@ export const useProductStore = create((set) => ({
 
     }
   },
+
+ fetchSearchProducts: async ({ query, min, max }) => {
+  set({ loading: true });
+
+  try {
+    const response = await searchproductsAction({ query, min, max });
+
+    set({
+      products: response,
+      loading: false,
+    });
+
+    return true;
+
+  } catch (error) {
+    console.error("Error searching products:", error);
+    set({ loading: false, error: error.message });
+    return false;
+  }
+},
 
 
 }));
