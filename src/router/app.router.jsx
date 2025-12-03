@@ -25,6 +25,7 @@ import ProductPage from "@/items/pages/ProductPage";
 import { UpdateProductPage } from "@/items/pages/UpdateProductPage";
 import BuyPage from "@/items/pages/BuyPage";
 import PurchasedPage from "@/auth/pages/PurchasedPage";
+import ShoppingCart from "@/items/pages/ShoppingCart";
 
 export const appRouter = createBrowserRouter([
   // public routes
@@ -62,7 +63,11 @@ export const appRouter = createBrowserRouter([
       { path: "/product/updateProduct/:id", element: <UpdateProductPage/> },
       { path: "/product/buy", element: <BuyPage/> },
       { path: "/purchasedProducts", element: <PurchasedPage/> },
-      { path: "/search", element: <SearchPage/> }
+      { path: "/search", element: <SearchPage/> },
+      { path: "/myCart", element: <ShoppingCart/> },
+
+      
+
 
     ],
   },

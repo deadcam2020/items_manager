@@ -7,6 +7,7 @@ import {
 } from "@/services/upload";
 
 import {
+  addToCartAction,
   deleteProductAction,
   fetchGetAllProductsAction,
   fetchGetProductAction,
@@ -219,14 +220,33 @@ export const useProductStore = create((set) => ({
     }
   },
 
- fetchSearchProducts: async ({ query, min, max }) => {
+ fetchSearchProducts: async ({ query, min, max, status }) => {
   set({ loading: true });
 
   try {
-    const response = await searchproductsAction({ query, min, max });
+    const response = await searchproductsAction({ query, min, max, status });
 
     set({
       products: response,
+      loading: false,
+    });
+
+    return true;
+
+  } catch (error) {
+    console.error("Error searching products:", error);
+    set({ loading: false, error: error.message });
+    return false;
+  }
+},
+
+ fetchAddToCart: async ({ id, uid, quantity }) => {
+  set({ loading: true });
+
+  try {
+    const response = await addToCartAction({  id, uid, quantity });
+
+    set({
       loading: false,
     });
 

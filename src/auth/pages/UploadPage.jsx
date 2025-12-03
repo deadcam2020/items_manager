@@ -14,7 +14,9 @@ export const UploadPage = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRef = useRef(null);
     const { uploadProduct, loading } = useProductStore()
-    const {user} = useAuthStore()
+    const { user } = useAuthStore()
+const [status, setStatus] = useState('new')
+
 
 
 
@@ -45,9 +47,12 @@ export const UploadPage = () => {
             category: formData.get("category"),
             stock: parseInt(formData.get("stock")),
             seller: user.name,
-        }
+            status: formData.get("status"),
 
-        
+        }
+console.log(producData.status);
+
+
         const ok = await uploadProduct(producData, file)
 
         if (ok) {
@@ -121,7 +126,7 @@ export const UploadPage = () => {
                         </div>
                     </div>
 
-                    
+
                     <div className="w-1/3 flex flex-col gap-2">
                         <label className="font-semibold">Stock</label>
                         <div className="flex items-center bg-gray-300 p-2 rounded-xl border-2 hover:border-primary">
@@ -142,6 +147,21 @@ export const UploadPage = () => {
                             className="bg-gray-300 p-2 rounded-xl border-2 hover:border-primary outline-none"
                             required
                         />
+                    </div>
+
+                    <div className="w-1/3 flex flex-col gap-2">
+                        <label className="font-semibold">Estado</label>
+
+                        <select
+                            className="bg-gray-300 p-2 rounded-md"
+                            name='status'
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value)}
+                            required
+                        >
+                            <option value="new">Nuevo</option>
+                            <option value="used">Usado</option>
+                        </select>
                     </div>
 
                     <button

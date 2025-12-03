@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProductStore } from "../store/products.store";
+import { MdOutlineShoppingCart } from "react-icons/md";
+import { useAuthStore } from "@/auth/store/auth.store";
+import { toast } from "sonner";
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); // <-- cantidad
-  const { fetchGetProduct } = useProductStore();
+  const { fetchGetProduct, fetchAddToCart } = useProductStore();
+  const { user } = useAuthStore()
 
   useEffect(() => {
     const getProduct = async () => {
@@ -36,7 +40,13 @@ const ProductPage = () => {
 
   if (!product) return <p className="p-4">Cargando...</p>;
 
-  const increase = () => setQuantity((q) => q + 1);
+  const increase = () => {
+    if (quantity < product.stock) {
+      setQuantity(quantity + 1);
+    } else {
+      alert("No puedes comprar más de la cantidad disponible.");
+    }
+  }
   const decrease = () => setQuantity((q) => Math.max(1, q - 1));
 
   const handleBuy = () => {
@@ -51,6 +61,18 @@ const ProductPage = () => {
         quantity,
       },
     });
+  };
+
+  const handleAddToCart = async () => {
+    const ok = await fetchAddToCart({ id: product.id, uid: user.id, quantity })
+
+    if (ok) {
+      toast.success('Se agregó al carrito')
+    }else{
+      toast.error('No se pudo agregar al carrito')
+
+    }
+
   };
 
 
@@ -93,9 +115,9 @@ const ProductPage = () => {
             </div>
 
             <p>
-                <span className="font-semibold">Stock: </span>
-                {product.stock}
-              </p>
+              <span className="font-semibold">Stock: </span>
+              {product.stock}
+            </p>
 
             {/* quantity selector */}
             <div className="mt-4">
@@ -125,6 +147,8 @@ const ProductPage = () => {
                 >
                   +
                 </button>
+
+
               </div>
             </div>
 
@@ -133,6 +157,14 @@ const ProductPage = () => {
               className="bg-primary font-semibold hover:bg-blue-600 text-white py-2 px-4 rounded-lg mt-4 w-fit cursor-pointer"
             >
               Comprar
+            </button>
+
+
+            <button
+              onClick={handleAddToCart}
+              className=" flex flex-row items-center bg-primary font-semibold hover:bg-blue-600 text-white py-2 px-4 rounded-lg mt-4 w-fit cursor-pointer"
+            >
+              Agregar al carrito
             </button>
           </div>
         </div>

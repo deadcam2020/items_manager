@@ -124,12 +124,13 @@ export const fetchUserPurchasedProductsAction = async (buyer_id) => {
   return await response.json();
 };
 
-export const searchproductsAction = async ({ query, min, max }) => {
+export const searchproductsAction = async ({ query, min, max, status }) => {
 
   const token = localStorage.getItem('token');
+  console.log("status", status);
 
   const response = await fetch(
-    `${BASE_URL}/api/products/search?query=${query}&min=${min}&max=${max}`,
+    `${BASE_URL}/api/products/search?query=${query}&min=${min}&max=${max}&status=${status}`,
     {
       method: 'GET',
       headers: {
@@ -144,3 +145,30 @@ export const searchproductsAction = async ({ query, min, max }) => {
 
   return await response.json();
 };
+
+export const addToCartAction = async ({ id, uid, quantity }) => {
+
+  console.log(id, uid, quantity);
+  
+
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(
+    `${BASE_URL}/api/products/saveToCart`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id, uid, quantity})
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Error al buscar productos');
+  }
+
+  return await response.json();
+};
+
