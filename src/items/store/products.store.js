@@ -1,28 +1,31 @@
 // src/store/product.store.js
 import { create } from "zustand";
 import {
-  createProductAction,
-  createSaleAction,
-  uploadProductImageAction
+    uploadProductImageAction
 } from "@/services/upload";
 
 import {
   addToCartAction,
+  createProductAction,
+  createSaleAction,
   deleteProductAction,
+  deleteProductFromCartACtion,
   fetchGetAllProductsAction,
   fetchGetProductAction,
   fetchUserProductsAction,
   fetchUserPurchasedProductsAction,
+  getCartItems,
   searchproductsAction,
   updateProductAction
 } from "@/services/products";
 
 
 
-export const useProductStore = create((set) => ({
+export const useProductStore = create((set, get) => ({
   products: [],
   productRes: [],//para almacenar el producto que se busca por id
   purchasedProducts: [],
+  cartProducts: [],
   loading: false,
   error: null,
 
@@ -159,7 +162,7 @@ export const useProductStore = create((set) => ({
 
   updateProductWithoutImage: async ({ id, productData }) => {
     console.log(productData.stock);
-    
+
     try {
       set({ loading: true, error: null });
       //  Crear producto en la base de datos
@@ -220,44 +223,89 @@ export const useProductStore = create((set) => ({
     }
   },
 
- fetchSearchProducts: async ({ query, min, max, status }) => {
-  set({ loading: true });
+  fetchSearchProducts: async ({ query, min, max, status }) => {
+    set({ loading: true });
 
-  try {
-    const response = await searchproductsAction({ query, min, max, status });
+    try {
+      const response = await searchproductsAction({ query, min, max, status });
 
-    set({
-      products: response,
-      loading: false,
-    });
+      set({
+        products: response,
+        loading: false,
+      });
 
-    return true;
+      return true;
 
-  } catch (error) {
-    console.error("Error searching products:", error);
-    set({ loading: false, error: error.message });
-    return false;
-  }
-},
+    } catch (error) {
+      console.error("Error searching products:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+  },
 
- fetchAddToCart: async ({ id, uid, quantity }) => {
-  set({ loading: true });
+  fetchAddToCart: async ({ id, uid, quantity }) => {
+    set({ loading: true });
 
-  try {
-    const response = await addToCartAction({  id, uid, quantity });
+    try {
+      const response = await addToCartAction({ id, uid, quantity });
 
-    set({
-      loading: false,
-    });
+      set({
+        loading: false,
+      });
 
-    return true;
+      return true;
 
-  } catch (error) {
-    console.error("Error searching products:", error);
-    set({ loading: false, error: error.message });
-    return false;
-  }
-},
+    } catch (error) {
+      console.error("Error searching products:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+  },
 
+
+   fetchGetCartProducts: async () => {
+    set({ loading: true });
+
+    try {
+      const response = await getCartItems();
+
+      
+      set({
+        loading: false,
+        cartProducts: response
+      });
+
+      return true;
+
+    } catch (error) {
+      console.error("Error searching products:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+  },
+
+   deleteProductFromCart: async (id) => {
+    set({ loading: true });
+
+    try {
+       await deleteProductFromCartACtion(id);
+
+       const {cartProducts} = get()
+
+      set({
+        loading: false,
+        cartProducts: cartProducts.filter((cartProducts) => cartProducts.cart_item_id !== id)
+        //state.cartProducts.filter((cartProducts) => cartProducts.id !== id),
+
+      });
+
+      return true;
+
+    } catch (error) {
+      console.error("Error delete product:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+  },
 
 }));

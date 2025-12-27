@@ -2,6 +2,70 @@
 const BASE_URL = import.meta.env.VITE_API_URL
 
 
+export const createProductAction = async (finalProduct) => {
+
+  const { title, description, price, category, imageurl, imageid, seller, stock, status } = finalProduct
+  const token = localStorage.getItem('token');
+
+
+  try {
+
+    const res = await fetch(`${BASE_URL}/api/products/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title, description, price, category, imageurl, imageid, seller, stock, status }),
+    })
+
+    if (!res) throw new Error;
+
+
+    const data = await res.json()
+
+    return data
+
+  } catch (error) {
+    console.log(error);
+
+  }
+
+
+};
+
+
+export const createSaleAction = async (saleData) => {
+
+  const token = localStorage.getItem('token');
+  
+  try {
+
+    const res = await fetch(`${BASE_URL}/api/products/sale`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(saleData),
+    })
+
+    if (!res) throw new Error;
+
+
+    const data = await res.json()
+
+    return data
+
+  } catch (error) {
+    console.log(error);
+
+  }
+
+
+};
+
+
 export const fetchUserProductsAction = async (uid) => {
 
   const token = localStorage.getItem('token')
@@ -148,9 +212,6 @@ export const searchproductsAction = async ({ query, min, max, status }) => {
 
 export const addToCartAction = async ({ id, uid, quantity }) => {
 
-  console.log(id, uid, quantity);
-  
-
   const token = localStorage.getItem('token');
 
   const response = await fetch(
@@ -172,3 +233,51 @@ export const addToCartAction = async ({ id, uid, quantity }) => {
   return await response.json();
 };
 
+
+export const getCartItems = async () => {
+
+  
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(
+    `${BASE_URL}/api/products/getCart`,
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Error al buscar productos');
+  }
+
+  return await response.json();
+};
+
+
+export const deleteProductFromCartACtion = async (id) => {
+
+  
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(
+    `${BASE_URL}/api/products/deleteFromCart/${id}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Error al buscar productos');
+  }
+
+  return await response.json();
+};

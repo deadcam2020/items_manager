@@ -53,27 +53,7 @@ const {saveSale} = useProductStore()
 
       {/* Card principal */}
       <div className="bg-white shadow-md rounded-xl p-6 flex flex-col gap-6">
-
-        {/* Producto */}
-        <div className="flex gap-4 items-center">
-          <img
-            src={imageurl}
-            alt={title}
-            className="w-24 h-24 rounded-lg object-cover shadow"
-          />
-          <div>
-            <h2 className="text-xl font-semibold">{title}</h2>
-            <p className="text-gray-600">Precio: ${price.toLocaleString()} COP</p>
-            <p className="text-gray-600">Cantidad: {quantity}</p>
-          </div>
-        </div>
-
-        {/* Totales */}
-        <div className="border-t pt-4">
-          <p className="text-lg font-semibold">
-            Total: <span className="text-primary">${total.toLocaleString()} COP</span>
-          </p>
-        </div>
+       
 
         {/* Dirección */}
         <div className="border-t pt-4">
@@ -96,6 +76,27 @@ const {saveSale} = useProductStore()
             <p>
                 {user.payment_account}
             </p>
+        </div>
+
+        {/* Producto */}
+        <div className="flex gap-4 items-center">
+          <img
+            src={imageurl}
+            alt={title}
+            className="w-24 h-24 rounded-lg object-cover shadow"
+          />
+          <div>
+            <h2 className="text-xl font-semibold">{title}</h2>
+            <p className="text-gray-600">Precio: ${price.toLocaleString()} COP</p>
+            <p className="text-gray-600">Cantidad: {quantity}</p>
+          </div>
+        </div>
+
+        {/* Totales */}
+        <div className="border-t pt-4">
+          <p className="text-lg font-semibold">
+            Total: <span className="text-primary">${total.toLocaleString()} COP</span>
+          </p>
         </div>
 
         {/* Botón */}
