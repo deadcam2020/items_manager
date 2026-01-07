@@ -138,7 +138,7 @@ export const UpdateProductPage = () => {
                             defaultValue={product.description}
 
                             name="description"
-                            className="bg-gray-300 p-2 rounded-xl border-2 hover:border-primary outline-none h-20"
+                            className="bg-gray-300 no-scrollbar p-2 rounded-xl border-2 hover:border-gray-200 outline-none h-20"
                             required
                         />
                     </div>
@@ -152,7 +152,6 @@ export const UpdateProductPage = () => {
 
                                 name="price"
                                 type="number"
-                                step="0.01"
                                 className="bg-transparent border-0 w-full outline-none"
                                 required
                             />

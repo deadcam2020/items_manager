@@ -40,7 +40,6 @@ export const createSaleAction = async (saleData) => {
   const token = localStorage.getItem('token');
   
   try {
-
     const res = await fetch(`${BASE_URL}/api/products/sale`, {
       method: 'POST',
       headers: {
@@ -52,17 +51,12 @@ export const createSaleAction = async (saleData) => {
 
     if (!res) throw new Error;
 
-
     const data = await res.json()
-
     return data
-
   } catch (error) {
     console.log(error);
 
   }
-
-
 };
 
 
@@ -272,6 +266,31 @@ export const deleteProductFromCartACtion = async (id) => {
         'Authorization': `Bearer ${token}`,
       },
       
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Error al buscar productos');
+  }
+
+  return await response.json();
+};
+
+
+export const addValorationAction = async ({ id, valoration }) => {
+console.log(id, valoration);
+
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(
+    `${BASE_URL}/api/products/addValoration`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id, valoration})
     }
   );
 

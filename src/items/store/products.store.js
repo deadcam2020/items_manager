@@ -6,6 +6,7 @@ import {
 
 import {
   addToCartAction,
+  addValorationAction,
   createProductAction,
   createSaleAction,
   deleteProductAction,
@@ -193,7 +194,6 @@ export const useProductStore = create((set, get) => ({
       const newSale = await createSaleAction(saleData);
 
       set((state) => ({
-
         loading: false,
       }));
 
@@ -303,6 +303,25 @@ export const useProductStore = create((set, get) => ({
 
     } catch (error) {
       console.error("Error delete product:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+  },
+
+   addValoration: async ({ id, valoration}) => {
+    set({ loading: true });
+
+    try {
+      const response = await addValorationAction({ id, valoration });
+
+      set({
+        loading: false,
+      });
+
+      return true;
+
+    } catch (error) {
+      console.error("Error searching products:", error);
       set({ loading: false, error: error.message });
       return false;
     }

@@ -21,7 +21,10 @@ const navigate  = useNavigate()
   }
 
   return (
-   <header className="flex flex-col gap-4 bg-purple-100 w-[calc(100%+4rem)] -mx-8 -mt-8 px-8 py-3 rounded-md shadow-sm md:flex-row md:items-center md:justify-between">
+   <header className=" 
+   flex flex-col gap-4 bg-purple-100 
+   w-[calc(100%+4rem)] -mx-8 -mt-8 px-8 py-3 rounded-md z-10
+   shadow-sm md:flex-row md:items-center md:justify-between">
 
   {/* CONTENEDOR: Logo + Input  */}
   <div className="flex w-100 items-center gap-3">

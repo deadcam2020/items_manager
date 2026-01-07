@@ -1,21 +1,51 @@
 import React, { useEffect } from 'react'
 import { useProductStore } from '../store/products.store'
-import { MdDelete } from 'react-icons/md';
 import { useAuthStore } from '@/auth/store/auth.store';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const BuyCartPage = () => {
+  const navigate = useNavigate();
   const { user } = useAuthStore()
-  const { cartProducts, fetchGetCartProducts } = useProductStore()
+  const { cartProducts, fetchGetCartProducts, saveSale } = useProductStore()
 
   useEffect(() => {
     fetchGetCartProducts()
   }, []);
-  
-  
+
   const total = cartProducts.reduce((acc, item) => {
     return acc + item.price * item.quantity
   }, 0)
-  console.log(total);
+  console.log(cartProducts[1]);
+
+  const handlePurchase = async () => {
+
+    try {
+      for (const item of cartProducts) {
+        const saleData = {
+          buyer_id: user.id,
+          buyer_name: user.name,
+          seller_name: item.seller,
+          product_id: item.product_id,
+          title: item.title,
+          imageurl: item.imageurl,
+          unit_price: Number(item.price),
+          quantity: Number(item.quantity),
+          payment_method: user.payment_method,
+        };
+
+        await saveSale(saleData);
+      }
+
+      navigate("/");
+      toast.success("Su compra ha sido exitosa");
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al procesar la compra");
+    }
+  };
+
 
   return (
     <>
@@ -55,7 +85,7 @@ const BuyCartPage = () => {
 
             {cartProducts.map((item) => (
               <li
-                key={item.id}
+                key={item.cart_item_id}
                 className='bg-white rounded-2xl shadow-md p-4 flex gap-4 items-center border border-gray-200 max-w-lg w-full mx-auto '
               >
 
@@ -110,13 +140,13 @@ const BuyCartPage = () => {
             </p>
           </div>
 
-             {/* Botón */}
-        <button
-          // onClick={handlePurchase}
-          className="bg-primary text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-600 transition"
-        >
-          Confirmar compra
-        </button>
+          {/* Botón */}
+          <button
+            onClick={handlePurchase}
+            className="bg-primary text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-600 transition"
+          >
+            Confirmar compra
+          </button>
 
         </div>
       </div>

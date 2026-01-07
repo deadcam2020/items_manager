@@ -86,7 +86,7 @@ const MyProductsPage = () => {
 
             {/* Precio más destacado */}
             <p className="text-base md:text-lg font-bold text-primary mt-1">
-              ${product.price} COP
+              ${Number(product.price).toLocaleString()} COP
             </p>
 
             <div className="p-1 flex flex-row gap-1" >

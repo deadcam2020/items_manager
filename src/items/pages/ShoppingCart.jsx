@@ -48,7 +48,7 @@ const ShoppingCart = () => {
         className="bg-white rounded-2xl shadow-md p-4 flex gap-4 items-center border border-gray-200 max-w-xl w-full mx-auto"
       >
         {/* Imagen */}
-        <div className="min-w-[90px] min-h-[90px]">
+        <div className="min-w-[90px] min-h-[90px] max-w-[100px] max-h-[100px]">
           <img
             src={item.imageurl || "https://i.imgur.com/EJLFNOw.png"}
             alt="producto"
@@ -79,7 +79,7 @@ const ShoppingCart = () => {
 
             <div>
               <p className="text-sm text-gray-600">Cantidad</p>
-              <p className="text-base font-semibold text-gray-800">{item.quantity}</p>
+              <p className="text-base font-semibold text-gray-800 text-right">{item.quantity}</p>
             </div>
 
             <button

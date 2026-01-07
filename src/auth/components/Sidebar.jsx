@@ -18,8 +18,10 @@ export const Sidebar = () => {
 
     return (
         <>
-            <div className={`bg-[#06001e] min-h-screen fixed lg:static w-[80%] md:w-[40%] lg:w-full transition-all z-50 duration-300 ${showMenu ? "left-0" : "-left-full"
-                }`}> "
+            <div className={`bg-[#06001e] min-h-screen fixed lg:static 
+            w-[80%] md:w-[40%] lg:w-full transition-all z-50 
+            duration-300 ${showMenu ? "left-0" : "-left-full"
+                }`}>
 
 
                 {/* profile */}
@@ -72,7 +74,7 @@ export const Sidebar = () => {
                                 <MdOutlinePersonSearch /> My products
                             </Link>
 
-                             <Link
+                            <Link
                                 to='/purchasedProducts'
                                 onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
@@ -82,7 +84,7 @@ export const Sidebar = () => {
                             </Link>
 
 
-                              <Link
+                            <Link
                                 to='/myCart'
                                 onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'

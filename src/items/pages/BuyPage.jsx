@@ -6,8 +6,8 @@ import { useProductStore } from "../store/products.store";
 const BuyPage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-const {user} = useAuthStore()
-const {saveSale} = useProductStore()
+  const { user } = useAuthStore()
+  const { saveSale } = useProductStore()
 
   // Si el usuario llega sin estado, lo devolvemos a productos
   if (!state) {
@@ -20,28 +20,28 @@ const {saveSale} = useProductStore()
 
   const total = price * quantity;
 
-  const handlePurchase = async() => {
+  const handlePurchase = async () => {
 
-    const saleData =  {
-        buyer_id: user.id,
-        title,
-        seller_id,
-        imageurl,
-        seller_name: seller,
-        buyer_name: user.name,
-        product_id: productId,
-        unit_price: parseInt(price),
-        quantity,
-        payment_method: user.payment_method,
-      }
+    const saleData = {
+      buyer_id: user.id,
+      title,
+      seller_id,
+      imageurl,
+      seller_name: seller,
+      buyer_name: user.name,
+      product_id: productId,
+      unit_price: parseInt(price),
+      quantity,
+      payment_method: user.payment_method,
+    }
 
-      const ok = await saveSale(saleData)
+    const ok = await saveSale(saleData)
 
-      if (ok) {
-        navigate("/")
-        toast.success("Su compra ha sido exitosa")
-      }
- 
+    if (ok) {
+      navigate("/")
+      toast.success("Su compra ha sido exitosa")
+    }
+
   };
 
   if (!user) return <p className="p-4">Cargando...</p>;
@@ -53,7 +53,7 @@ const {saveSale} = useProductStore()
 
       {/* Card principal */}
       <div className="bg-white shadow-md rounded-xl p-6 flex flex-col gap-6">
-       
+
 
         {/* Dirección */}
         <div className="border-t pt-4">
@@ -65,17 +65,17 @@ const {saveSale} = useProductStore()
         <div className="border-t pt-4">
           <h3 className="font-semibold mb-2">Método de pago</h3>
 
-            <p>
-                {user.payment_method}
-            </p>
+          <p>
+            {user.payment_method}
+          </p>
         </div>
 
         <div className="border-t pt-4">
           <h3 className="font-semibold mb-2"># de cuenta</h3>
 
-            <p>
-                {user.payment_account}
-            </p>
+          <p>
+            {user.payment_account}
+          </p>
         </div>
 
         {/* Producto */}

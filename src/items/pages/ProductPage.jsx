@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProductStore } from "../store/products.store";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import { useAuthStore } from "@/auth/store/auth.store";
 import { toast } from "sonner";
 
@@ -27,7 +26,9 @@ const ProductPage = () => {
             category: data.category,
             seller: data.seller,
             uid: data.uid,
-            stock: data.stock
+            stock: data.stock,
+            sold: data.sold,
+            status: data.status
           });
         }
       } catch (error) {
@@ -44,7 +45,7 @@ const ProductPage = () => {
     if (quantity < product.stock) {
       setQuantity(quantity + 1);
     } else {
-      alert("No puedes comprar más de la cantidad disponible.");
+      alert("No puedes comprar más unidades que el stock disponible.");
     }
   }
   const decrease = () => setQuantity((q) => Math.max(1, q - 1));
@@ -94,11 +95,14 @@ const ProductPage = () => {
 
           {/* product info */}
           <div className="md:w-1/2 flex flex-col gap-4">
+            <p className="text-gray-400 font-semibold">{product.sold} vendidos</p>
+
+
             <h1 className="text-3xl font-bold">{product.title}</h1>
 
             <p className="text-gray-700">{product.description}</p>
 
-            <p className="text-2xl font-bold text-primary">${product.price} COP</p>
+            <p className="text-2xl font-bold text-primary">${Number(product.price).toLocaleString()} COP</p>
 
             <div className="flex flex-col -gap-2">
               <p>
@@ -106,7 +110,8 @@ const ProductPage = () => {
                 {product.category}
               </p>
               <p>
-                <span className="font-semibold">Condición: </span>TODO
+                <span className="font-semibold">Condición: </span>
+                {product.status}
               </p>
               <p>
                 <span className="font-semibold">Vendedor: </span>
