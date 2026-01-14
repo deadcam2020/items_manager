@@ -12,6 +12,7 @@ import {
   deleteProductAction,
   deleteProductFromCartACtion,
   fetchGetAllProductsAction,
+  fetchGetAllUserProductsAction,
   fetchGetProductAction,
   fetchUserProductsAction,
   fetchUserPurchasedProductsAction,
@@ -93,12 +94,12 @@ export const useProductStore = create((set, get) => ({
   },
 
 
-  fetchGetAllProducts: async (id) => {
+  fetchGetAllUserProducts: async (id) => {
     set({ loading: true })
 
     try {
 
-      const response = await fetchGetAllProductsAction(id)
+      const response = await fetchGetAllUserProductsAction(id)
 
       set({ products: response, loading: false })
 
@@ -108,6 +109,23 @@ export const useProductStore = create((set, get) => ({
       set({ loading: false, error: error.message });
     }
   },
+
+    fetchGetAllProducts: async () => {
+    set({ loading: true })
+
+    try {
+
+      const response = await fetchGetAllProductsAction()
+
+      set({ products: response, loading: false })
+
+      return response;
+    } catch (error) {
+      console.error("Error fetching all products:", error);
+      set({ loading: false, error: error.message });
+    }
+  },
+
 
   deleteProduct: async (id) => {
     set({ loading: true });

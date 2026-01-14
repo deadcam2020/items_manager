@@ -94,7 +94,7 @@ export const UpdateProductPage = () => {
 
     return (
 
-        <div className="grid lg:grid-cols-4 xl:grid-cols-6 min-h-screen">
+        <div className="grid lg:grid-cols-4 xl:grid-cols-6 min-h-screen text-black">
             <main className="lg:col-span-3 xl:col-span-5 bg-gray-100 p-8 min-h-screen">
                 <h1 className="text-2xl md:text-3xl font-bold mb-4">Actualiza tu producto</h1>
 

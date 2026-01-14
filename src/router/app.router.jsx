@@ -3,14 +3,12 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { HomeLayout } from "@/layouts/HomeLayout";
-import { AdminLayout } from "@/layouts/AdminLayout";
 
 import { LoginPage } from "@/auth/pages/LoginPage";
 import { RegisterPage } from "@/auth/pages/RegisterPage";
 import { ProfilePage } from "@/auth/pages/ProfilePage";
 import { ProfileUpdatePage } from "@/auth/pages/ProfileUpdatePage";
 import { UploadPage } from "@/auth/pages/UploadPage";
-import { AdminPage } from "@/auth/pages/AdminPage";
 
 import { HomePage } from "@/items/pages/HomePage";
 import { SearchPage } from "@/items/pages/SearchPage";
@@ -27,6 +25,13 @@ import BuyPage from "@/items/pages/BuyPage";
 import PurchasedPage from "@/auth/pages/PurchasedPage";
 import ShoppingCart from "@/items/pages/ShoppingCart";
 import BuyCartPage from "@/items/pages/BuyCartPage";
+import Home from "@/admin/pages/Home";
+import AdminLayout from "@/layouts/AdminLayout";
+import Products from "@/admin/pages/Products";
+import Categories from "@/admin/pages/Categories";
+import Customers from "@/admin/pages/Customers";
+import Reports from "@/admin/pages/Reports";
+import { Settings } from "lucide-react";
 
 export const appRouter = createBrowserRouter([
   // public routes
@@ -59,17 +64,17 @@ export const appRouter = createBrowserRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "profile/update", element: <ProfileUpdatePage /> },
       { path: "upload", element: <UploadPage /> },
-      { path: "myproducts", element: <MyProductsPage/> },
-      { path: "product/:id", element: <ProductPage/> },
-      { path: "/product/updateProduct/:id", element: <UpdateProductPage/> },
-      { path: "/product/buy", element: <BuyPage/> },
-      { path: "/purchasedProducts", element: <PurchasedPage/> },
-      { path: "/search", element: <SearchPage/> },
-      { path: "/myCart", element: <ShoppingCart/> },
-      { path: "/buyCart", element: <BuyCartPage/> },
+      { path: "myproducts", element: <MyProductsPage /> },
+      { path: "product/:id", element: <ProductPage /> },
+      { path: "/product/updateProduct/:id", element: <UpdateProductPage /> },
+      { path: "/product/buy", element: <BuyPage /> },
+      { path: "/purchasedProducts", element: <PurchasedPage /> },
+      { path: "/search", element: <SearchPage /> },
+      { path: "/myCart", element: <ShoppingCart /> },
+      { path: "/buyCart", element: <BuyCartPage /> },
 
 
-      
+
 
 
     ],
@@ -84,7 +89,17 @@ export const appRouter = createBrowserRouter([
       </AdminRoute>
     ),
     children: [
-      { index: true, element: <AdminPage /> },
+      { index: true, element: <Home /> },
+      { path: "dashboard", element: <Home/> },
+
+      { path: "products", element: <Products /> },
+      { path: "categories", element: <Categories /> },
+      { path: "customers", element: <Customers /> },
+      { path: "reports", element: <Reports /> },
+      { path: "settings", element: <Settings /> },
+
+
+
     ],
   },
 

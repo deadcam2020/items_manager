@@ -5,18 +5,19 @@ import { CustomFullScreenLoading } from './custom/CustomsFullScreenLoading';
 import { useAuthStore } from '../store/auth.store';
 
 export const Content = () => {
-  const { loading, products, fetchGetAllProducts } = useProductStore();
+  const { loading, products, fetchGetAllUserProducts } = useProductStore();
   const navigate = useNavigate();
   const { user } = useAuthStore()
 
   useEffect(() => {
-    fetchGetAllProducts(user.id);
-  }, [fetchGetAllProducts]);
+    
+    fetchGetAllUserProducts(user.id);
+  }, [fetchGetAllUserProducts]);
 
   if (loading) return <CustomFullScreenLoading />;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
+    <div className="grid grid-cols-2 w-full md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
 
       {products.map((product) => (
         <div

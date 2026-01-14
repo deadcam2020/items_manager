@@ -147,10 +147,28 @@ export const updateProductAction = async ({ id, productData, oldImageId }) => {
 };
 
 
-export const fetchGetAllProductsAction = async (id) => {
+export const fetchGetAllUserProductsAction = async (id) => {
+  const token = localStorage.getItem('token');
+    console.log('id ----', id);
+
+  const response = await fetch(`${BASE_URL}/api/products/products/${id}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Error en fetchGetAllUserProductsAction');
+  }
+
+  return await response.json();
+};
+
+export const fetchGetAllProductsAction = async () => {
   const token = localStorage.getItem('token');
 
-  const response = await fetch(`${BASE_URL}/api/products/products?id=${id}`, {
+  const response = await fetch(`${BASE_URL}/api/admin/allProducts`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -163,6 +181,7 @@ export const fetchGetAllProductsAction = async (id) => {
 
   return await response.json();
 };
+
 
 
 export const fetchUserPurchasedProductsAction = async (buyer_id) => {
