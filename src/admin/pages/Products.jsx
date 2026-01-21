@@ -1,7 +1,6 @@
 import { useAuthStore } from '@/auth/store/auth.store'
 import React, { useEffect } from 'react'
 import { CustomFullScreenLoading } from '@/auth/components/custom/CustomsFullScreenLoading'
-import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useProductStore } from '@/items/store/products.store'
 
@@ -9,7 +8,6 @@ const Products = () => {
 
   const { user } = useAuthStore
   const { products, loading, fetchGetAllProducts, deleteProduct } = useProductStore()
-  const navigate = useNavigate()
 
   useEffect(() => {
     fetchGetAllProducts();
@@ -53,19 +51,22 @@ const Products = () => {
 
 
   return (
-    <div className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 w-full ">
+    // <div className="grid grid-cols-2  md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 ">
+    <div className="products-grid">
+
 
       {products.map((product) => (
         <div
-          onClick={() => navigate(`/product/updateProduct/${product.id}`)}
+          // onClick={() => navigate(`/product/updateProduct/${product.id}`)}
           key={product.id}
           className="
-        flex flex-col justify-between    
+        flex flex-col    
     w-full
     p-2 rounded-xl gap-2
     bg-white shadow-sm
     hover:shadow-md transition-shadow duration-200
     min-h-[280px]  
+    lg:max-h-80 
       "
         >
           <img
@@ -100,7 +101,7 @@ const Products = () => {
                 Eliminar
               </button>
 
-              <button
+              {/* <button
                 onClick={(e) => {
                   e.stopPropagation(); // evita que se dispare el onClick del contenedor padre
                   navigate(`/product/updateProduct/${product.id}`);
@@ -108,7 +109,7 @@ const Products = () => {
                 className="bg-primary p-1 rounded-sm text-white hover:font-bold cursor-pointer"
               >
                 Editar
-              </button>
+              </button> */}
             </div>
 
           </div>

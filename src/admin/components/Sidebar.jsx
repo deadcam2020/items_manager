@@ -15,6 +15,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                     <img
                         src={logo}
                         alt="home"
+                        className='ww-20 md:w-20'
                     />
                 </NavLink>
                 <span className='icon close_icon' onClick={OpenSidebar}>X</span>

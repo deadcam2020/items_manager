@@ -297,7 +297,6 @@ export const deleteProductFromCartACtion = async (id) => {
 
 
 export const addValorationAction = async ({ id, valoration }) => {
-console.log(id, valoration);
 
   const token = localStorage.getItem('token');
 
@@ -310,6 +309,51 @@ console.log(id, valoration);
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({id, valoration})
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Error al buscar productos');
+  }
+
+  return await response.json();
+};
+
+
+export const getCategoriesAction = async () => {
+
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(
+    `${BASE_URL}/api/admin/categories`,
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Error al buscar productos');
+  }
+
+  return await response.json();
+};
+
+export const getAdminHomeDataAction = async () => {
+
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(
+    `${BASE_URL}/api/admin/home_data`,
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
     }
   );
 

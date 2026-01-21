@@ -1,4 +1,5 @@
-import React from 'react'
+import { useProductStore } from '@/items/store/products.store';
+import React, { useEffect } from 'react'
 import 
 { BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill}
  from 'react-icons/bs'
@@ -8,7 +9,13 @@ import
 
 function Home() {
 
-    const data = [
+    const {products, categories, adminData, getAdminHomeData} = useProductStore()
+
+    useEffect(() => {
+      getAdminHomeData()
+    }, [getAdminHomeData]);
+
+    const data = [  
         {
           name: 'Page A',
           uv: 4000,
@@ -53,6 +60,7 @@ function Home() {
         },
       ];
      
+console.log(adminData);
 
   return (
     <main className='main-container'>
@@ -66,21 +74,21 @@ function Home() {
                     <h3>PRODUCTS</h3>
                     <BsFillArchiveFill className='card_icon'/>
                 </div>
-                <h1>300</h1>
+                <h1>{adminData.total_products}</h1>
             </div>
             <div className='card'>
                 <div className='card-inner'>
                     <h3>CATEGORIES</h3>
                     <BsFillGrid3X3GapFill className='card_icon'/>
                 </div>
-                <h1>12</h1>
+                <h1>{adminData.total_categories}</h1>
             </div>
             <div className='card'>
                 <div className='card-inner'>
                     <h3>CUSTOMERS</h3>
                     <BsPeopleFill className='card_icon'/>
                 </div>
-                <h1>33</h1>
+                <h1>{adminData.total_users}</h1>
             </div>
             <div className='card'>
                 <div className='card-inner'>

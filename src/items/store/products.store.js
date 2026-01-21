@@ -16,7 +16,9 @@ import {
   fetchGetProductAction,
   fetchUserProductsAction,
   fetchUserPurchasedProductsAction,
+  getAdminHomeDataAction,
   getCartItems,
+  getCategoriesAction,
   searchproductsAction,
   updateProductAction
 } from "@/services/products";
@@ -30,6 +32,9 @@ export const useProductStore = create((set, get) => ({
   cartProducts: [],
   loading: false,
   error: null,
+  //admin data
+  categories: [],
+  adminData:[],
 
   uploadProduct: async (productData, file) => {
     try {
@@ -334,6 +339,48 @@ export const useProductStore = create((set, get) => ({
 
       set({
         loading: false,
+      });
+
+      return true;
+
+    } catch (error) {
+      console.error("Error searching products:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+  },
+
+  //ADMIN FUNCTIONS
+
+     getCategories: async () => {
+    set({ loading: true });
+
+    try {
+      const response = await getCategoriesAction();
+
+      set({
+        loading: false,
+        categories: response
+      });
+
+      return true;
+
+    } catch (error) {
+      console.error("Error searching products:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+  },
+
+    getAdminHomeData    : async () => {
+    set({ loading: true });
+
+    try {
+      const response = await getAdminHomeDataAction();
+
+      set({
+        loading: false,
+        adminData: response
       });
 
       return true;
