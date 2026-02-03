@@ -3,11 +3,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { checkAuthAction } from '../actions/check-auth.action.js';
 import { uploadProfileImageAction } from '@/services/upload.js';
+import { getUsersgeneralInfoAction } from '@/services/admin.js';
 
 export const useAuthStore = create(
   persist(
     (set, get) => ({
       user: null,
+      usersData:[],
       authStatus: 'checking',
       token: null,
 
@@ -90,6 +92,24 @@ export const useAuthStore = create(
 
           set((state) => ({
             user: { ...state.user, ...updatedImage },
+          }));
+          return true
+
+        } catch (error) {
+          console.error('Error subiendo foto', error);
+          return false;
+        }
+      },
+
+      getUsersGeneralInfo: async () => {
+
+        
+        try {
+
+          const response = await getUsersgeneralInfoAction()
+
+          set((state) => ({
+            usersData: response,
           }));
           return true
 

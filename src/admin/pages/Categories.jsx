@@ -7,7 +7,6 @@ const {categories, getCategories} = useProductStore()
 useEffect(() => {
   getCategories()
 }, [getCategories]);
-console.log(categories);
 
     return (
         <div className="categories-container">

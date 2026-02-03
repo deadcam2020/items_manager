@@ -22,6 +22,7 @@ import {
   searchproductsAction,
   updateProductAction
 } from "@/services/products";
+import { countProductsByCategory, dashboardStatsAction } from "@/services/admin";
 
 
 
@@ -35,6 +36,8 @@ export const useProductStore = create((set, get) => ({
   //admin data
   categories: [],
   adminData:[],
+  dashboardStats: [],
+  categoriesCount: [],
 
   uploadProduct: async (productData, file) => {
     try {
@@ -392,4 +395,39 @@ export const useProductStore = create((set, get) => ({
     }
   },
 
-}));
+  productsByCategory: async () => {
+    set({ loading: true }); 
+    try {
+      const response = await countProductsByCategory();
+      set({
+        loading: false,
+        categoriesCount: response
+      });
+      return true;
+    } catch (error) {
+      console.error("Error fetching products by category:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+
+  },
+
+    getDashboardStats: async () => {
+    set({ loading: true }); 
+    try {
+      const response = await dashboardStatsAction();
+      set({
+        loading: false,
+        dashboardStats: response
+      });
+      return true;
+    } catch (error) {
+      console.error("Error fetching dashboard stats:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+
+  }}
+
+
+));
