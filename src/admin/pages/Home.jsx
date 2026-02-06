@@ -85,6 +85,8 @@ function Home() {
 
       <div className='charts' style={{ height: 700}}>
         <ResponsiveContainer style={{ height: 350 }}>
+            <h3 className='text-white font-semibold'>Categorías populares</h3>
+
 
           <BarChart
             width={500}
@@ -107,6 +109,9 @@ function Home() {
         </ResponsiveContainer>
 
         <ResponsiveContainer style={{ height: 350 }}>
+
+            <h3 className='text-white font-semibold'>Total ventas</h3>
+
           <LineChart
             width={500}
             height={300}
@@ -127,7 +132,10 @@ function Home() {
           </LineChart>
         </ResponsiveContainer>
 
+
         <ResponsiveContainer style={{height: 700}}>
+            <h3 className='text-white font-semibold'>Más vendidos</h3>
+
           <PieChart
           margin={{
               top: 5,

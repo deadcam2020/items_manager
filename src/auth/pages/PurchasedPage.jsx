@@ -22,27 +22,25 @@ const PurchasedPage = () => {
   if (loading) return <p>Cargando compras...</p>
 
 
-const handleRatingSubmit = async (rating) => {
-  if (!selectedProduct) return;
+  const handleRatingSubmit = async (rating) => {
+    if (!selectedProduct) return;
 
-  const ok = await addValoration({
-    id: selectedProduct,
-    valoration: rating,
-  });
+    const ok = await addValoration({
+      id: selectedProduct,
+      valoration: rating,
+    });
 
-  if (ok) {
-    toast.success("Gracias por tu calificación ");
-    setOpen(false);
-    setSelectedProduct(null);
-  }
-};
+    if (ok) {
+      toast.success("Gracias por tu calificación ");
+      setOpen(false);
+      setSelectedProduct(null);
+    }
+  };
 
 
   return (
 
     <>
-
-
       <ul className="flex flex-col gap-4 mt-4">
 
         {purchasedProducts.map((item) => (
@@ -109,7 +107,7 @@ const handleRatingSubmit = async (rating) => {
                   Calificar producto
                 </button>
 
-               
+
               </div>
 
             </div>
@@ -119,11 +117,11 @@ const handleRatingSubmit = async (rating) => {
 
       </ul>
 
-     <RateProductModal
-  isOpen={open}
-  onClose={() => setOpen(false)}
-  onSubmit={handleRatingSubmit}
-/>
+      <RateProductModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onSubmit={handleRatingSubmit}
+      />
 
 
 

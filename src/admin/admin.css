@@ -215,8 +215,12 @@ body {
 
   /* categoriea */
 
-  .categories-grid {
+  .categories-container {
     grid-area: main;
+
+  }
+
+  .categories-grid {
     width: 100%;
     display: grid;
     padding: 20px 20px;

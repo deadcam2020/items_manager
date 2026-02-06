@@ -70,7 +70,6 @@ export const Sidebar = () => {
                                 onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
                             >
-
                                 <MdOutlinePersonSearch /> My products
                             </Link>
 
@@ -79,7 +78,6 @@ export const Sidebar = () => {
                                 onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
                             >
-
                                 <FaMoneyBills /> Mis compras
                             </Link>
 
@@ -122,7 +120,7 @@ export const Sidebar = () => {
 
                     <div className='flex flex-col text-white gap-1 bg-[#06001e]/60 rounded-xl p-4'>
                         <p>Having problems?</p>
-                        <a href="">Contact us</a>
+                        <a className='hover:text-primary' href="/contactUs">Contact us</a>
                     </div>
 
                 </div>

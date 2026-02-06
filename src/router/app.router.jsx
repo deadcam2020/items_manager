@@ -32,6 +32,7 @@ import Categories from "@/admin/pages/Categories";
 import Customers from "@/admin/pages/Customers";
 import Reports from "@/admin/pages/Reports";
 import { Settings } from "lucide-react";
+import ContactUs from "@/auth/pages/ContactUs";
 
 export const appRouter = createBrowserRouter([
   // public routes
@@ -72,6 +73,8 @@ export const appRouter = createBrowserRouter([
       { path: "/search", element: <SearchPage /> },
       { path: "/myCart", element: <ShoppingCart /> },
       { path: "/buyCart", element: <BuyCartPage /> },
+      { path: "/contactUs", element: <ContactUs /> },
+
 
 
 

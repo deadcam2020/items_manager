@@ -7,7 +7,7 @@ function Header({OpenSidebar}) {
   return (
     <header className='header'>
         <div className='menu-icon'>
-            <BsJustify className='icon' onClick={OpenSidebar}/>
+            <BsJustify className='icon hover:cursor-pointer' onClick={OpenSidebar}/>
         </div>
         <div className='header-left'>
             <BsSearch  className='icon'/>
