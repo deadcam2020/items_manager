@@ -1,7 +1,7 @@
 // src/store/product.store.js
 import { create } from "zustand";
 import {
-    uploadProductImageAction
+  uploadProductImageAction
 } from "@/services/upload";
 
 import {
@@ -22,7 +22,7 @@ import {
   searchproductsAction,
   updateProductAction
 } from "@/services/products";
-import { countProductsByCategory, dashboardStatsAction } from "@/services/admin";
+import { countProductsByCategory, dashboardStatsAction, getReportsAction } from "@/services/admin";
 
 
 
@@ -35,9 +35,10 @@ export const useProductStore = create((set, get) => ({
   error: null,
   //admin data
   categories: [],
-  adminData:[],
+  adminData: [],
   dashboardStats: [],
   categoriesCount: [],
+  reports: [],
 
   uploadProduct: async (productData, file) => {
     try {
@@ -118,7 +119,7 @@ export const useProductStore = create((set, get) => ({
     }
   },
 
-    fetchGetAllProducts: async () => {
+  fetchGetAllProducts: async () => {
     set({ loading: true })
 
     try {
@@ -289,13 +290,13 @@ export const useProductStore = create((set, get) => ({
   },
 
 
-   fetchGetCartProducts: async () => {
+  fetchGetCartProducts: async () => {
     set({ loading: true });
 
     try {
       const response = await getCartItems();
 
-      
+
       set({
         loading: false,
         cartProducts: response
@@ -310,13 +311,13 @@ export const useProductStore = create((set, get) => ({
     }
   },
 
-   deleteProductFromCart: async (id) => {
+  deleteProductFromCart: async (id) => {
     set({ loading: true });
 
     try {
-       await deleteProductFromCartACtion(id);
+      await deleteProductFromCartACtion(id);
 
-       const {cartProducts} = get()
+      const { cartProducts } = get()
 
       set({
         loading: false,
@@ -334,7 +335,7 @@ export const useProductStore = create((set, get) => ({
     }
   },
 
-   addValoration: async ({ id, valoration}) => {
+  addValoration: async ({ id, valoration }) => {
     set({ loading: true });
 
     try {
@@ -355,7 +356,7 @@ export const useProductStore = create((set, get) => ({
 
   //ADMIN FUNCTIONS
 
-     getCategories: async () => {
+  getCategories: async () => {
     set({ loading: true });
 
     try {
@@ -375,7 +376,7 @@ export const useProductStore = create((set, get) => ({
     }
   },
 
-    getAdminHomeData    : async () => {
+  getAdminHomeData: async () => {
     set({ loading: true });
 
     try {
@@ -396,7 +397,7 @@ export const useProductStore = create((set, get) => ({
   },
 
   productsByCategory: async () => {
-    set({ loading: true }); 
+    set({ loading: true });
     try {
       const response = await countProductsByCategory();
       set({
@@ -412,8 +413,8 @@ export const useProductStore = create((set, get) => ({
 
   },
 
-    getDashboardStats: async () => {
-    set({ loading: true }); 
+  getDashboardStats: async () => {
+    set({ loading: true });
     try {
       const response = await dashboardStatsAction();
       set({
@@ -427,7 +428,26 @@ export const useProductStore = create((set, get) => ({
       return false;
     }
 
-  }}
+  },
 
 
+  getReports: async () => {
+    set({ loading: true });
+    try {
+      const response = await getReportsAction();
+      set({
+        loading: false,
+        reports: response
+      });
+      return true;
+    } catch (error) {
+      console.error("Error fetching reports:", error);
+      set({ loading: false, error: error.message });
+      return false;
+    }
+
+  }
+
+
+}
 ));

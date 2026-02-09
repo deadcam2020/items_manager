@@ -1,8 +1,8 @@
-import { loginAction, updateUserAction} from '@/services/auth';
+import { createReportAction, loginAction, updateUserAction} from '@/services/auth';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { checkAuthAction } from '../actions/check-auth.action.js';
-import { uploadProfileImageAction } from '@/services/upload.js';
+import { uploadProductImageAction, uploadProfileImageAction, uploadReportImageAction } from '@/services/upload.js';
 import { getUsersgeneralInfoAction } from '@/services/admin.js';
 
 export const useAuthStore = create(
@@ -120,7 +120,34 @@ export const useAuthStore = create(
       },
 
 
-      //siguiente función
+        createReport: async (reportData, file) => {
+          try {
+            set({ loading: true, error: null });
+      
+            //  Subir imagen a Cloudinary
+            const uploadData = await uploadReportImageAction(file);
+      
+            const finalReport = {
+              ...reportData,
+              imageurl: uploadData.imageurl,
+              imageid: uploadData.imageid,
+            };
+      
+            //  Crear reporte en la base de datos
+            const newReport = await createReportAction(finalReport);
+      
+            //  Actualizar el estado global
+            set((state) => ({
+              loading: false,
+            }));
+      
+            return true;
+          } catch (err) {
+            console.error("Error uploading report:", err);
+            set({ error: err.message, loading: false });
+            return false;
+          }
+        },
 
     }),
     {

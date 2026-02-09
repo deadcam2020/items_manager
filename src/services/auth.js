@@ -85,10 +85,33 @@ export const updateUserAction = async (userData) => {
     throw error;
   }
 
-
-
 };
 
 
+export const createReportAction = async (finalReport) => {
+  const token = localStorage.getItem('token');
 
+  try {
+    const res = await fetch(`${BASE_URL}/api/users/create_report`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(finalReport),
+    });
 
+    // Validar respuesta del servidor
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error || 'Error al crear reporte');
+    }
+
+    const newReport = await res.json();
+    return newReport;
+  } catch (error) {
+    console.error(' Error en createReportAction:', error.message);
+    throw error;
+  }
+
+}

@@ -212,6 +212,34 @@ body {
 
 /* End Main  */
 
+/* report */
+
+.reports-container {
+  grid-area: main;
+  margin: 20px;
+  
+}
+
+.reports-grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px;
+}
+
+.report-card {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* separa contenido y fecha */
+  background-color: #161c25;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 120px; /* opcional, mejora el layout */
+  color: white;
+}
+
 
   /* categoriea */
 
