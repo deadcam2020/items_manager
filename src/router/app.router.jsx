@@ -33,6 +33,7 @@ import Customers from "@/admin/pages/Customers";
 import Reports from "@/admin/pages/Reports";
 import { Settings } from "lucide-react";
 import ContactUs from "@/auth/pages/ContactUs";
+import ReplyPage from "@/admin/pages/ReplyPage";
 
 export const appRouter = createBrowserRouter([
   // public routes
@@ -93,19 +94,18 @@ export const appRouter = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Home /> },
-      { path: "dashboard", element: <Home/> },
+      { path: "dashboard", element: <Home /> },
 
       { path: "products", element: <Products /> },
       { path: "categories", element: <Categories /> },
       { path: "customers", element: <Customers /> },
       { path: "reports", element: <Reports /> },
       { path: "settings", element: <Settings /> },
+      { path: "reports/reply/:id", element: <ReplyPage /> },
 
-
-
-    ],
+],
   },
 
-  // Catch-all (404)
-  { path: "*", element: <Navigate to="/" /> },
+// Catch-all (404)
+{ path: "*", element: <Navigate to="/" /> },
 ]);

@@ -222,6 +222,7 @@ body {
 
 .reports-grid {
   width: 100%;
+  gap: 20px;
   display: flex;
   flex-direction: column;
   padding: 20px 20px;
@@ -240,6 +241,9 @@ body {
   color: white;
 }
 
+.reply-page {
+grid-area: main;
+}
 
   /* categoriea */
 

@@ -149,7 +149,6 @@ export const updateProductAction = async ({ id, productData, oldImageId }) => {
 
 export const fetchGetAllUserProductsAction = async (id) => {
   const token = localStorage.getItem('token');
-    console.log('id ----', id);
 
   const response = await fetch(`${BASE_URL}/api/products/products/${id}`, {
     method: 'GET',

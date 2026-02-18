@@ -36,7 +36,6 @@ function Home() {
     getDashboardStats()
 
   }, []);
-  console.log(dashboardStats);
 
   const formattedData = categoriesCount.map(item => ({
     ...item,
