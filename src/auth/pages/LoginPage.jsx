@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { toast } from 'sonner';
 
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import logo from '../../assets/images/logo.png'
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { FaFingerprint, FaGoogle, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -13,7 +15,7 @@ export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(true);
   const [isLogging, setIsLogging] = useState(false)
 
-  const { login } = useAuthStore()
+  const { login, setUser } = useAuthStore()
 
   const navigate = useNavigate();
 
@@ -55,7 +57,7 @@ export const LoginPage = () => {
           <h1 className='text-white text-lg md:text-xl font-semibold p-5'>Iniciar Sesión</h1>
 
           <form onSubmit={handleLogin}
-          className='flex flex-col gap-3'
+            className='flex flex-col gap-3'
           >
 
             <div className='w-full flex flex-col gap-3'>
@@ -109,8 +111,35 @@ export const LoginPage = () => {
           </div>
 
 
-          <div className='p-3 mt-3 md:px-6 lg:px-10  cursor-pointer rounded-xl bg-gray-800 '>
-            <FaGoogle color='white' />
+          <div className='mt-3'>
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                try {
+
+                  const res = await axios.post(
+                    "http://localhost:4000/api/auth/google",
+                    {
+                      token: credentialResponse.credential
+
+                    }
+                  );
+
+                  // Guardar token
+                  localStorage.setItem("token", res.data.token);
+
+                  // Guardar en Zustand
+                  setUser(res.data.user, res.data.token);
+
+                  navigate('/');
+
+                } catch (error) {
+                  console.log(error);
+
+                  toast.error("Error al iniciar con Google");
+                }
+              }}
+              onError={() => toast.error("Login con Google falló")}
+            />
           </div>
 
           <p className=' text-xs text-gray-400 mt-3 '>

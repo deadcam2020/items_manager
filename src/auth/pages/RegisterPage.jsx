@@ -4,15 +4,18 @@ import { MdOutlineAlternateEmail } from "react-icons/md";
 import { FaFingerprint, FaGoogle, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
 import { toast } from "sonner"
-
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 import { useNavigate } from 'react-router-dom';
 import { signUpAction } from '@/services/auth';
+import { useAuthStore } from '../store/auth.store';
 
 export const RegisterPage = () => {
 
   const [idLogging, setIsLogging] = useState(false);
   const navigate = useNavigate()
+  const { setUser } = useAuthStore()
 
 
 
@@ -152,9 +155,37 @@ export const RegisterPage = () => {
             <div className='w-2/3 h-[2px] bg-gray-400'></div>
           </div>
 
-          <div className='p-3 mt-3 md:px-6 lg:px-10 cursor-pointer rounded-xl bg-gray-800'>
-            <FaGoogle color='white' />
+             <div className='mt-3'>
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                try {
+
+                  const res = await axios.post(
+                    "http://localhost:4000/api/auth/google",
+                    {
+                      token: credentialResponse.credential
+
+                    }
+                  );
+
+                  // Guardar token
+                  localStorage.setItem("token", res.data.token);
+
+                  // Guardar en Zustand
+                  setUser(res.data.user, res.data.token);
+
+                  navigate('/');
+
+                } catch (error) {
+                  console.log(error);
+
+                  toast.error("Error al iniciar con Google");
+                }
+              }}
+              onError={() => toast.error("Login con Google falló")}
+            />
           </div>
+
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-import { createReportAction, loginAction, updateUserAction} from '@/services/auth';
+import { createReportAction, loginAction, updateUserAction } from '@/services/auth';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { checkAuthAction } from '../actions/check-auth.action.js';
@@ -9,7 +9,7 @@ export const useAuthStore = create(
   persist(
     (set, get) => ({
       user: null,
-      usersData:[],
+      usersData: [],
       authStatus: 'checking',
       token: null,
 
@@ -66,6 +66,14 @@ export const useAuthStore = create(
         }
       },
 
+      setUser: (user, token) => {
+        set({
+          user,
+          token,
+          authStatus: 'authenticated'
+        });
+      },
+
       updateUser: async (userData) => {
         try {
           const updatedUser = await updateUserAction(userData);
@@ -83,12 +91,12 @@ export const useAuthStore = create(
         }
       },
 
-      updateProfileImage: async ({file, oldProfileImageId}) => {
+      updateProfileImage: async ({ file, oldProfileImageId }) => {
 
-        
+
         try {
 
-          const updatedImage = await uploadProfileImageAction({file, oldProfileImageId})
+          const updatedImage = await uploadProfileImageAction({ file, oldProfileImageId })
 
           set((state) => ({
             user: { ...state.user, ...updatedImage },
@@ -103,7 +111,7 @@ export const useAuthStore = create(
 
       getUsersGeneralInfo: async () => {
 
-        
+
         try {
 
           const response = await getUsersgeneralInfoAction()
@@ -120,34 +128,34 @@ export const useAuthStore = create(
       },
 
 
-        createReport: async (reportData, file) => {
-          try {
-            set({ loading: true, error: null });
-      
-            //  Subir imagen a Cloudinary
-            const uploadData = await uploadReportImageAction(file);
-      
-            const finalReport = {
-              ...reportData,
-              imageurl: uploadData.imageurl,
-              imageid: uploadData.imageid,
-            };
-      
-            //  Crear reporte en la base de datos
-            const newReport = await createReportAction(finalReport);
-      
-            //  Actualizar el estado global
-            set((state) => ({
-              loading: false,
-            }));
-      
-            return true;
-          } catch (err) {
-            console.error("Error uploading report:", err);
-            set({ error: err.message, loading: false });
-            return false;
-          }
-        },
+      createReport: async (reportData, file) => {
+        try {
+          set({ loading: true, error: null });
+
+          //  Subir imagen a Cloudinary
+          const uploadData = await uploadReportImageAction(file);
+
+          const finalReport = {
+            ...reportData,
+            imageurl: uploadData.imageurl,
+            imageid: uploadData.imageid,
+          };
+
+          //  Crear reporte en la base de datos
+          const newReport = await createReportAction(finalReport);
+
+          //  Actualizar el estado global
+          set((state) => ({
+            loading: false,
+          }));
+
+          return true;
+        } catch (err) {
+          console.error("Error uploading report:", err);
+          set({ error: err.message, loading: false });
+          return false;
+        }
+      },
 
     }),
     {

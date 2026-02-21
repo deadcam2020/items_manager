@@ -59,8 +59,7 @@ export const signUpAction = async ({ name, email, password }) => {
 
 export const updateUserAction = async (userData) => {
   const token = localStorage.getItem('token');
-
-
+console.log(userData);
 
   try {
     const res = await fetch(`${BASE_URL}/api/users/update`, {

@@ -48,7 +48,7 @@ export const ProfileUpdatePage = () => {
 
     return (
         <>
-            <div className="grid lg:grid-cols-4 xl:grid-cols-6 min-h-screen relative ">
+            <div className="grid lg:grid-cols-4 xl:grid-cols-6 min-h-screen relative text-black ">
                 <main className="lg:col-span-3 xl:col-span-5 bg-gray-100 p-8 min-h-screen relative">
                     <h1 className="text-2xl md:text-3xl font-bold"> Actualiza tus datos </h1>
                     <div className='w-full mt-4 h-1 bg-primary'></div>

@@ -2,9 +2,8 @@ import React from 'react'
 import { Toaster } from "@/components/ui/sonner"
 
 //import { AppRouter } from './router/AppRouter'
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { useAuthStore } from './auth/store/auth.store.js'
 import { CustomFullScreenLoading } from './auth/components/custom/CustomsFullScreenLoading'
 import { RouterProvider } from 'react-router-dom'
@@ -29,19 +28,16 @@ const CheckAuthProvider = ({ children }) => {
 }
 
 export const App = () => {
-
-
   return (
-    <>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <QueryClientProvider client={queryClient}>
         <Toaster />
 
         <CheckAuthProvider>
-          <RouterProvider router = {appRouter} />
+          <RouterProvider router={appRouter} />
         </CheckAuthProvider>
 
-        
       </QueryClientProvider>
-    </>
+    </GoogleOAuthProvider>
   )
 }
