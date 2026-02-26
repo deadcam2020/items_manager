@@ -4,93 +4,63 @@ import { MdAttachMoney } from "react-icons/md";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProductStore } from '@/items/store/products.store';
 import { toast } from 'sonner';
-
+import { useUpdateProductFull } from '../hooks/products.mutatios';
+import { useGetProduct } from '../hooks/products.queries';
 
 
 
 export const UpdateProductPage = () => {
-    const navigate = useNavigate();
-    const [selectedImage, setSelectedImage] = useState(null);
-    const fileInputRef = useRef(null);
-    const { updateProductWithImage, updateProductWithoutImage, loading, fetchGetProduct } = useProductStore()
     const { id } = useParams();
-    const [product, setProduct] = useState(null);
+    const navigate = useNavigate();
+    const fileInputRef = useRef(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
+    // 1. Obtenemos los datos automáticamente
+    const { data: product, isLoading } = useGetProduct(id);
 
-    useEffect(() => {
-        const getProduct = async () => {
-            try {
-                const data = await fetchGetProduct(id);
-                if (data) {
-                    setProduct({
-                        id: data.id,
-                        title: data.title,
-                        description: data.description,
-                        price: data.price,
-                        imageurl: data.imageurl,
-                        oldimageid: data.imageid,
-                        category: data.category,
-                        stock: data.stock
-                    });
-                }
-            } catch (error) {
-                console.error("Error fetching product:", error);
-            }
-        };
+    // 2. Preparamos la mutación
+    const { mutateAsync: updateProduct, isPending } = useUpdateProductFull();
 
-
-
-        getProduct();
-    }, [id, fetchGetProduct]);
-
-    if (!product) return <p className="p-4">Cargando...</p>;
-
-
-
-    const handleImageClick = () => fileInputRef.current.click();
-
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) setSelectedImage(URL.createObjectURL(file));
-    };
+    if (isLoading) return <p className="p-4">Cargando datos del producto...</p>;
+    if (!product) return <p className="p-4">Producto no encontrado</p>;
 
     const handleUpdateProduct = async (event) => {
         event.preventDefault();
-
         const formData = new FormData(event.target);
+        const file = fileInputRef.current.files[0];
 
-        const rawData = Object.fromEntries(formData.entries());
-        const file = fileInputRef.current.files[0]
-
-
+        // Limpiamos campos vacíos y formateamos números
         const productData = Object.fromEntries(
-            Object.entries(rawData).filter(([_, value]) => value?.trim() !== '')
+            Object.entries(Object.fromEntries(formData)).filter(([_, v]) => v?.trim() !== '')
         );
+        productData.price = parseFloat(productData.price);
+        productData.stock = parseInt(productData.stock);
 
-            productData.price = parseFloat(productData.price);
-            productData.stock = parseFloat(productData.stock);
+        try {
+            await updateProduct({
+                id,
+                productData,
+                file,
+                oldImageId: product.imageid // Enviamos el ID actual por si se reemplaza
+            });
 
-        
-        let isUpdatedProductValid;
-        if (!file) {
-             isUpdatedProductValid = await updateProductWithoutImage({ id, productData })
-        } else {
-             isUpdatedProductValid = await updateProductWithImage({ id, productData, file, oldImageId: product.oldimageid })
-
+            toast.success('Producto actualizado con éxito');
+            navigate('/myproducts');
+        } catch (error) {
+            const msg = error?.response?.data?.error || error.message || 'Error al actualizar';
+            toast.error(msg);
         }
+    };
 
+    const handleImageClick = () => fileInputRef.current.click();
 
-        if (isUpdatedProductValid) {
-            navigate('/myproducts')
-            toast.success('Datos actualizados')
+    const handleFileChange = (event) => {
 
-        } else {
-            toast.error('Error al actualizar los datos')
-        }
+        const file = event.target.files[0];
 
-    }
+        if (file) setSelectedImage(URL.createObjectURL(file));
 
+    };
 
     return (
 
@@ -159,7 +129,7 @@ export const UpdateProductPage = () => {
                     </div>
 
 
-                       <div className="w-1/3 flex flex-col gap-2">
+                    <div className="w-1/3 flex flex-col gap-2">
                         <label className="font-semibold">Stock</label>
                         <div className="flex items-center bg-gray-300 p-2 rounded-xl border-2 hover:border-primary">
                             <input
@@ -168,7 +138,7 @@ export const UpdateProductPage = () => {
                                 name="stock"
                                 type="number"
                                 className="bg-transparent border-0 w-full outline-none"
-                              
+
                             />
                         </div>
                     </div>
@@ -187,10 +157,10 @@ export const UpdateProductPage = () => {
 
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={isLoading}
                         className="bg-primary text-white py-2 px-4 rounded-full mt-8 hover:font-semibold hover:border-2 hover:bg-blue-600 hover:border-primary text-sm self-end"
                     >
-                        {loading ? "Subiendo..." : "Actualizar producto"}
+                        {isLoading ? "Subiendo..." : "Actualizar producto"}
                     </button>
                 </form>
             </main>

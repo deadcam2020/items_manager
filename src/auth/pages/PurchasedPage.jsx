@@ -5,21 +5,22 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import PDF from '../components/PDF';
 import RateProductModal from '@/items/components/RateProductModal';
 import { toast } from 'sonner';
+import { useUserPurchasedProducts } from '@/items/hooks/products.queries';
+import { useAddValoration } from '@/items/hooks/products.mutatios';
 
 
 const PurchasedPage = () => {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { user } = useAuthStore()
-  const { purchasedProducts, fetchUserPurchasedProducts, loading, addValoration } = useProductStore()
+  // const { purchasedProducts, fetchUserPurchasedProducts, loading, addValoration } = useProductStore()
+const {data: purchases = [], isLoading} = useUserPurchasedProducts(user?.id)
+const {mutateAsync: addValoration} = useAddValoration()
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchUserPurchasedProducts(user.id)
-    }
-  }, [user?.id])
+ console.log(purchases);
+ 
 
-  if (loading) return <p>Cargando compras...</p>
+  if (isLoading) return <p>Cargando compras...</p>
 
 
   const handleRatingSubmit = async (rating) => {
@@ -43,7 +44,7 @@ const PurchasedPage = () => {
     <>
       <ul className="flex flex-col gap-4 mt-4">
 
-        {purchasedProducts.map((item) => (
+        {purchases.map((item) => (
           <li
             key={item.id}
             className="bg-white rounded-2xl shadow-md p-4 flex gap-4 items-center border border-gray-200 max-w-lg w-full mx-auto  "
@@ -91,8 +92,8 @@ const PurchasedPage = () => {
                     fileName={`factura-${item.title}.pdf`}
                     className="text-blue-600 underline text-sm"
                   >
-                    {({ loading }) =>
-                      loading ? "Generando PDF..." : "Descargar factura"
+                    {({ isLoading }) =>
+                      isLoading ? "Generando PDF..." : "Descargar factura"
                     }
                   </PDFDownloadLink>
                 </div>

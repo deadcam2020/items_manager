@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useProductStore } from '@/items/store/products.store';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/auth.store';
+import { useCreateProductFull } from '@/items/hooks/products.mutatios';
 
 
 
@@ -13,15 +14,13 @@ export const UploadPage = () => {
     const navigate = useNavigate();
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRef = useRef(null);
-    const { uploadProduct, loading } = useProductStore()
+    // const { uploadProduct, loading } = useProductStore()
     const { user } = useAuthStore()
-const [status, setStatus] = useState('new')
+    const [status, setStatus] = useState('new')
 
-
-
+    const { mutateAsync: uploadProduct, isPending } = useCreateProductFull();
 
     const handleImageClick = () => fileInputRef.current.click();
-
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -40,7 +39,7 @@ const [status, setStatus] = useState('new')
 
         const formData = new FormData(e.target)
 
-        const producData = {
+        const productData = {
             title: formData.get("title"),
             description: formData.get("description"),
             price: parseFloat(formData.get("price")),
@@ -50,20 +49,25 @@ const [status, setStatus] = useState('new')
             status: formData.get("status"),
 
         }
-console.log(producData.status);
+        // console.log(producData.status);
+        // const ok = await uploadProduct(producData, file)
 
-
-        const ok = await uploadProduct(producData, file)
-
-        if (ok) {
-            toast.success('El producto se ha guardado')
+        try {
+           await uploadProduct({ productData, file });
+            toast.success('El producto se ha guardado');
             navigate('/myproducts');
-        } else {
-            toast.error('Error al guardar producto')
+        } catch (error) {
+            toast.error(error || 'Error al guardar producto');
         }
 
-    };
 
+        // if (ok) {
+        //     toast.success('El producto se ha guardado')
+        //     navigate('/myproducts');
+        // } else {
+        //     toast.error('Error al guardar producto')
+        // }
+    };
 
     return (
 
@@ -166,10 +170,10 @@ console.log(producData.status);
 
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={isPending}
                         className="bg-primary text-white py-2 px-4 rounded-full mt-8 hover:font-semibold hover:border-2 hover:bg-blue-600 hover:border-blue-600 text-sm self-end"
                     >
-                        {loading ? "Subiendo..." : "Subir producto"}
+                        {isPending ? "Subiendo..." : "Subir producto"}
                     </button>
                 </form>
             </main>

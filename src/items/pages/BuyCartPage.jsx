@@ -3,11 +3,16 @@ import { useProductStore } from '../store/products.store'
 import { useAuthStore } from '@/auth/store/auth.store';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useCart } from '../hooks/products.queries';
+import { useCreateSale } from '../hooks/products.mutatios';
 
 const BuyCartPage = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore()
   const { cartProducts, fetchGetCartProducts, saveSale } = useProductStore()
+  const {data: cart = [], isLoading} = useCart(user?.id)
+  const { mutateAsync: createSale } = useCreateSale()
+
 
   useEffect(() => {
     fetchGetCartProducts()
@@ -16,7 +21,7 @@ const BuyCartPage = () => {
   const total = cartProducts.reduce((acc, item) => {
     return acc + item.price * item.quantity
   }, 0)
-  console.log(cartProducts[1]);
+  console.log(cart[1]);
 
   const handlePurchase = async () => {
 
@@ -34,7 +39,7 @@ const BuyCartPage = () => {
           payment_method: user.payment_method,
         };
 
-        await saveSale(saleData);
+        await createSale(saleData);
       }
 
       navigate("/");
@@ -83,7 +88,7 @@ const BuyCartPage = () => {
           {/* productos */}
           <ul className='flex-col gap-2 mt-4'>
 
-            {cartProducts.map((item) => (
+            {cart.map((item) => (
               <li
                 key={item.cart_item_id}
                 className='bg-white rounded-2xl shadow-md p-4 flex gap-4 items-center border border-gray-200 max-w-lg w-full mx-auto '

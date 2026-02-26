@@ -4,20 +4,24 @@ import { useProductStore } from '../store/products.store'
 import { CustomFullScreenLoading } from '@/auth/components/custom/CustomsFullScreenLoading'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { useUserProducts } from '../hooks/products.queries'
+import { useDeleteProduct } from '../hooks/products.mutatios'
 
 const MyProductsPage = () => {
 
   const { user } = useAuthStore()
-  const { products, loading, fetchUserProducts, deleteProduct } = useProductStore()
+  // const { products, loading, fetchUserProducts, deleteProduct } = useProductStore()
+  const { data: products = [], isLoading, error} = useUserProducts(user?.id)
+  const { mutateAsync: deleteProduct } = useDeleteProduct()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchUserProducts(user.id);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.id) {
+  //     fetchUserProducts(user.id);
+  //   }
+  // }, [user]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <CustomFullScreenLoading />
     )
