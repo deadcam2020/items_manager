@@ -17,32 +17,22 @@ import {
   Pie,
 }
   from 'recharts';
+import { useAdminHomeData, useDashboardStats, useProductsByCategory } from '../hooks/admin.hooks';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate()
+  const { data: adminData = [], isLoading: isLoadingAdminData } = useAdminHomeData()
+  const { data: dashboardData = [], isLoading: isLoadingDashboardData } = useDashboardStats()
+  const { data: products_by_category = [], isLoading: isLoadingProductsByCategory } = useProductsByCategory()
 
-  const { productsByCategory,
-    categoriesCount,
-    adminData,
-    getDashboardStats,
-    dashboardStats,
-    getAdminHomeData,
-  } = useProductStore()
 
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00c49f"];
 
-  useEffect(() => {
-    getAdminHomeData()
-    productsByCategory()
-    getDashboardStats()
-
-  }, []);
-
-  const formattedData = categoriesCount.map(item => ({
+  const formattedData = products_by_category.map(item => ({
     ...item,
     total_products: Number(item.total_products)
   }));
-
-
 
 
   return (
@@ -52,39 +42,52 @@ function Home() {
       </div>
 
       <div className='main-cards'>
-        <div className='card'>
+
+        <div
+          onClick={() => navigate('/admin/products')}
+          className='card hover:cursor-pointer'>
           <div className='card-inner'>
             <h3>PRODUCTS</h3>
             <BsFillArchiveFill className='card_icon' />
           </div>
           <h1>{adminData.total_products}</h1>
         </div>
-        <div className='card'>
+
+        <div
+          onClick={() => navigate('/admin/categories')}
+          className='card hover:cursor-pointer'>
           <div className='card-inner'>
             <h3>CATEGORIES</h3>
             <BsFillGrid3X3GapFill className='card_icon' />
           </div>
           <h1>{adminData.total_categories}</h1>
         </div>
-        <div className='card'>
+
+        <div
+          onClick={() => navigate('/admin/customers')}
+          className='card hover:cursor-pointer'>
           <div className='card-inner'>
             <h3>CUSTOMERS</h3>
             <BsPeopleFill className='card_icon' />
           </div>
           <h1>{adminData.total_users}</h1>
         </div>
-        <div className='card'>
+
+        <div 
+          onClick={() => navigate('/admin/reports')}
+                className='card hover:cursor-pointer'>
           <div className='card-inner'>
-            <h3>ALERTS</h3>
+            <h3>REPORTS</h3>
             <BsFillBellFill className='card_icon' />
           </div>
-          <h1>42</h1>
+          <h1>{adminData.total_reports}</h1>
         </div>
+
       </div>
 
-      <div className='charts' style={{ height: 700}}>
+      <div className='charts' style={{ height: 700 }}>
         <ResponsiveContainer style={{ height: 350 }}>
-            <h3 className='text-white font-semibold'>Categorías populares</h3>
+          <h3 className='text-white font-semibold'>Categorías populares</h3>
 
 
           <BarChart
@@ -109,12 +112,12 @@ function Home() {
 
         <ResponsiveContainer style={{ height: 350 }}>
 
-            <h3 className='text-white font-semibold'>Total ventas</h3>
+          <h3 className='text-white font-semibold'>Total ventas</h3>
 
           <LineChart
             width={500}
             height={300}
-            data={dashboardStats.sales_by_month}
+            data={dashboardData.sales_by_month}
             margin={{
               top: 5,
               right: 30,
@@ -132,11 +135,11 @@ function Home() {
         </ResponsiveContainer>
 
 
-        <ResponsiveContainer style={{height: 700}}>
-            <h3 className='text-white font-semibold'>Más vendidos</h3>
+        <ResponsiveContainer style={{ height: 700 }}>
+          <h3 className='text-white font-semibold'>Más vendidos</h3>
 
           <PieChart
-          margin={{
+            margin={{
               top: 5,
               right: 30,
               left: 20,
@@ -144,7 +147,7 @@ function Home() {
             }}
           >
             <Pie
-              data={dashboardStats.best_products}
+              data={dashboardData.best_products}
               dataKey="total_sold"
               nameKey="title"
               cx="50%"

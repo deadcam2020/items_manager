@@ -119,14 +119,14 @@ export const addValorationAction = async ({ id, valoration }) => {
 
 };
 
-export const getCategoriesAction = async () => {
-    const { data } = await Api.get('/api/admin/categories');
-    return data;
+// export const getCategoriesAction = async () => {
+//     const { data } = await Api.get('/api/admin/categories');
+//     return data;
 
-};
+// };
 
-export const getAdminHomeDataAction = async () => {
-    const { data } = await Api.get('/api/admin/home_data');
-    return data;
+// export const getAdminHomeDataAction = async () => {
+//     const { data } = await Api.get('/api/admin/home_data');
+//     return data;
 
-};
+// };

@@ -22,7 +22,7 @@ import {
   searchproductsAction,
   updateProductAction
 } from "@/services/products";
-import { countProductsByCategory, dashboardStatsAction, getReportsAction } from "@/services/admin";
+import { countProductsByCategory, dashboardStatsAction, getReportsAction } from "@/services/admin.services";
 
 
 

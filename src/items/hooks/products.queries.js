@@ -6,8 +6,6 @@ import {
   fetchUserPurchasedProductsAction, 
   searchproductsAction, 
   getCartItems, 
-  getCategoriesAction, 
-  getAdminHomeDataAction, 
   fetchGetAllUserProductsAction
 } from "@/services/products.services";
 

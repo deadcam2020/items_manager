@@ -146,6 +146,8 @@ body {
   margin: 15px 0;
 }
 
+
+
 .products-grid {
   grid-area: main;
   width: 100%;
@@ -174,10 +176,12 @@ body {
   justify-content: space-around;
   padding: 8px 15px;
   border-radius: 5px;
+ 
 }
 
 .card:first-child {
   background-color: #2962ff;
+ 
 }
 
 .card:nth-child(2) {

@@ -4,10 +4,13 @@ import { useAuthStore } from "../store/auth.store";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useCreateReport } from "../hooks/auth.hooks";
 
 const ContactUs = () => {
   const navigate = useNavigate();
-  const { createReport, user } = useAuthStore()
+  const {  user } = useAuthStore()
+const { mutate: createReport } = useCreateReport()
+
   const { selectedImage, setSelectedImage } = useState(null)
   const fileInputRef = useRef(null)
 
@@ -35,14 +38,20 @@ const ContactUs = () => {
       uid: user.id,
     }
 
-    const ok = await createReport(reportData, file)
 
-    if (ok) {
-      toast.success('El reporte se ha enviado')
-      navigate('/')
-    } else {
-      toast.error('Error al enviar el reporte')
-    }
+    try {
+    
+    await createReport({ reportData, file });
+
+    toast.success('El reporte se ha enviado');
+    navigate('/');
+
+  } catch (error) {
+    const message = error?.response?.data?.error || 'Error al enviar el reporte';
+    toast.error(message);
+  }
+
+   
   }
 
   return (

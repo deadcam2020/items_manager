@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { checkAuthAction } from '../actions/check-auth.action.js';
 import { uploadProductImageAction, uploadProfileImageAction, uploadReportImageAction } from '@/services/upload.js';
-import { getUsersgeneralInfoAction } from '@/services/admin.js';
+import { getUsersgeneralInfoAction } from '@/services/admin.services.js';
 
 export const useAuthStore = create(
   persist(

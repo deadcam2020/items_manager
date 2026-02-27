@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth.store';
 import { toast } from 'sonner';
+import { useUpdateUserProfile } from '../hooks/auth.hooks';
 
 const departamentosColombia = [
     "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bolívar", "Boyacá",
@@ -14,7 +15,9 @@ const departamentosColombia = [
 
 export const ProfileUpdatePage = () => {
     const navigate = useNavigate();
-    const { updateUser, user } = useAuthStore();
+    const {  user } = useAuthStore();
+   const { mutate: updateProfile, data: updatedUser, isPending, isSuccess} = useUpdateUserProfile();
+
 
     const [departamento, setDepartamento] = useState(user.department || "");
     const [paymentMethod, setPaymentMethod] = useState(user.payment_method || "cash");
@@ -36,9 +39,9 @@ export const ProfileUpdatePage = () => {
             userData.payment_account = null;
         }
 
-        const isUpdateValid = await updateUser(userData);
+        updateProfile(userData);
 
-        if (isUpdateValid) {
+        if (!isSuccess) { //aunque se actualce el usuario da "false" en isSuccess, por eso se hace esta validación extra
             navigate('/profile');
             toast.success('Datos actualizados');
         } else {
@@ -175,6 +178,7 @@ export const ProfileUpdatePage = () => {
 
                         {/* BOTÓN GUARDAR */}
                         <button
+                        disabled={isPending}
                             type='submit'
                             className='absolute bg-primary right-4 text-white py-2 px-4 rounded-full mt-8 cursor-pointer hover:bg-blue-600 z-10'
                         >
