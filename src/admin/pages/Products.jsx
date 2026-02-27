@@ -3,18 +3,19 @@ import React, { useEffect } from 'react'
 import { CustomFullScreenLoading } from '@/auth/components/custom/CustomsFullScreenLoading'
 import { toast } from 'sonner'
 import { useProductStore } from '@/items/store/products.store'
+import { useDeleteProduct } from '@/items/hooks/products.mutatios'
+import { useAdminAllProducts } from '../hooks/admin.hooks'
 
 const Products = () => {
 
   const { user } = useAuthStore
-  const { products, loading, fetchGetAllProducts, deleteProduct } = useProductStore()
 
-  useEffect(() => {
-    fetchGetAllProducts();
+   const { data: products = [], isLoading, error} = useAdminAllProducts()
+    const { mutateAsync: deleteProduct } = useDeleteProduct()
 
-  }, [fetchGetAllProducts, user]);
 
-  if (loading) {
+
+  if (isLoading) {
     return (
       <CustomFullScreenLoading />
     )

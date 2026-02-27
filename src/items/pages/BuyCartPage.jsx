@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useProductStore } from '../store/products.store'
 import { useAuthStore } from '@/auth/store/auth.store';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -9,14 +8,9 @@ import { useCreateSale } from '../hooks/products.mutatios';
 const BuyCartPage = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore()
-  const { cartProducts, fetchGetCartProducts, saveSale } = useProductStore()
   const {data: cart = [], isLoading} = useCart(user?.id)
   const { mutateAsync: createSale } = useCreateSale()
 
-
-  useEffect(() => {
-    fetchGetCartProducts()
-  }, []);
 
   const total = cartProducts.reduce((acc, item) => {
     return acc + item.price * item.quantity

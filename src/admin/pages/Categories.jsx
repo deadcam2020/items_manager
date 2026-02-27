@@ -1,12 +1,15 @@
 import { useProductStore } from '@/items/store/products.store';
 import { useEffect } from 'react';
+import { useGetCategories } from '../hooks/admin.hooks';
 
 const Categories = () => {
-const {categories, getCategories} = useProductStore()
+//const {categories, getCategories} = useProductStore() 
 
-useEffect(() => {
-  getCategories()
-}, [getCategories]);
+const {data: categories = []} = useGetCategories()
+
+// useEffect(() => {
+//   getCategories()
+// }, [getCategories]);
 
     return (
         <div className="categories-container">

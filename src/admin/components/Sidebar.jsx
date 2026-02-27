@@ -21,7 +21,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                 <span className='icon close_icon' onClick={OpenSidebar}>X</span>
             </div>
 
-            <ul className='sidebar-list' onClick={openSidebarToggle}>
+            <ul className='sidebar-list' onClick={OpenSidebar}>
                 <NavLink to="/admin/dashboard" className="sidebar-list-item">
                     <BsGrid1X2Fill className='icon' />
                     Dashboard

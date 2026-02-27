@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useProductStore } from '@/items/store/products.store'
+import {  useState } from 'react'
 import { useAuthStore } from '../store/auth.store'
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import PDF from '../components/PDF';
@@ -13,7 +12,6 @@ const PurchasedPage = () => {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { user } = useAuthStore()
-  // const { purchasedProducts, fetchUserPurchasedProducts, loading, addValoration } = useProductStore()
 const {data: purchases = [], isLoading} = useUserPurchasedProducts(user?.id)
 const {mutateAsync: addValoration} = useAddValoration()
 

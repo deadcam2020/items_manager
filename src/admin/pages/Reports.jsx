@@ -1,15 +1,12 @@
-import { useProductStore } from "@/items/store/products.store";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAdminReports } from "../hooks/admin.hooks";
 
 const Reports = () => {
-    const { getReports, reports } = useProductStore();
+
+    const {data: reports = []} = useAdminReports()
     const [expandedId, setExpandedId] = useState(null);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        getReports();
-    }, [getReports]);
 
     // Función para alternar la expansión
     const toggleReport = (id) => {
@@ -43,7 +40,7 @@ const Reports = () => {
                                 <div>
                                     <p className="text-xs text-blue-400 font-bold uppercase">{report.user_name}</p>
                                     <h2 className="font-semibold text-lg">{report.headline}</h2>
-                                    <span className="text-xs text-gray-400 font-semibold">{report.status}</span>
+                                    <span className={`text-xs ${report.status === 'resolved' ? 'text-green-400' : 'text-red-400'} font-semibold`}>{report.status}</span>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <span className="text-xs text-gray-400">{formatDate(report.created_at)}</span>
@@ -75,7 +72,7 @@ const Reports = () => {
                                         </span>
                                         <button
                                             onClick={(e) => {
-                                                e.stopPropagation(); // Evita que al dar click al botón se cierre la card
+                                                e.stopPropagation(); 
                                             }}
                                             className="bg-red-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-600 transition-colors"
                                         >
@@ -83,7 +80,7 @@ const Reports = () => {
                                         </button>
                                         <button
                                             onClick={(e) => {
-                                                e.stopPropagation(); // Evita que al dar click al botón se cierre la card
+                                                e.stopPropagation(); 
                                                 navigate(`/admin/reports/reply/${report.id}`, { state: { report } });
                                             }}
                                             className="bg-white text-black px-6 py-2 rounded-lg font-bold hover:bg-gray-200 transition-colors"

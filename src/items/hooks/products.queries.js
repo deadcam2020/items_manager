@@ -37,18 +37,18 @@ export const useGetUserProducts = (uid) => {
 
 export const useGetProduct = (id) => {
   return useQuery({
-    queryKey: ['product', id],
+    queryKey: ['productData', id],
     queryFn: () => fetchGetProductAction(id),
     enabled: !!id,
   });
 };
 
-export const useAdminAllProducts = () => {
-  return useQuery({
-    queryKey: ['admin', 'products'],
-    queryFn: fetchGetAllProductsAction,
-  });
-};
+// export const useAdminAllProducts = () => {
+//   return useQuery({
+//     queryKey: ['admin', 'products'],
+//     queryFn: fetchGetAllProductsAction,
+//   });
+// };
 
 export const useSearchProducts = (filters) => {
   return useQuery({

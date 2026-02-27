@@ -94,4 +94,3 @@ export async function uploadReportImageAction(file) {
     throw error;
   }
 }
-

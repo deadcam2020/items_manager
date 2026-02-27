@@ -1,20 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   getUsersgeneralInfoAction, 
   countProductsByCategory, 
   dashboardStatsAction, 
   getReportsAction, 
   getAdminHomeDataAction,
-  getCategoriesAction
+  getCategoriesAction,
+  SendReportResponseAction
 } from "@/services/admin.services";
+import { fetchGetAllProductsAction } from "@/services/products.services";
 
 
 export const useUsersGeneralInfo = () => {
   return useQuery({
-    queryKey: ['admin', 'users'],
+    queryKey: ['users_general_info'],
     queryFn: getUsersgeneralInfoAction,
     // Los datos de usuarios no cambian cada segundo, podemos cachearlos 5 min
     staleTime: 1000 * 60 * 5, 
+  });
+};
+
+export const useAdminAllProducts = () => {
+  return useQuery({
+    queryKey: ['admin', 'products'],
+    queryFn: fetchGetAllProductsAction,
   });
 };
 
@@ -54,8 +63,19 @@ export const useAdminHomeData = () => {
 
 export const useGetCategories = () => {
   return useQuery({
+    queryKey: ['categories'],
     queryFn: getCategoriesAction,
     staleTime: 1000 * 60 * 5, 
     retry: 2, 
+  });
+};
+
+export const useSendReportResponse = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: SendReportResponseAction,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries(['admin', 'reports']);
+    }
   });
 };

@@ -10,16 +10,10 @@ import { useDeleteProduct } from '../hooks/products.mutatios'
 const MyProductsPage = () => {
 
   const { user } = useAuthStore()
-  // const { products, loading, fetchUserProducts, deleteProduct } = useProductStore()
   const { data: products = [], isLoading, error} = useUserProducts(user?.id)
   const { mutateAsync: deleteProduct } = useDeleteProduct()
   const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   if (user?.id) {
-  //     fetchUserProducts(user.id);
-  //   }
-  // }, [user]);
 
   if (isLoading) {
     return (

@@ -70,7 +70,7 @@ export const Sidebar = () => {
                                 onClick={() => setShowMenu(false)}
                                 className='flex items-center gap-4 text-white font-semibold py-2 px-4 rounded-xl hover:bg-[#06001e]/40 transition-colors'
                             >
-                                <MdOutlinePersonSearch /> My products
+                                <MdOutlinePersonSearch /> Mis productos
                             </Link>
 
                             <Link

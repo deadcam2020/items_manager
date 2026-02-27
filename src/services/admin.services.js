@@ -43,3 +43,9 @@ export const getCategoriesAction = async () => {
     return data;
 
 };
+
+export const SendReportResponseAction = async ({reportId, response}) => {
+    const { data } = await Api.put(`/api/admin/report_response/${reportId}`, { response });
+    return data;
+
+};

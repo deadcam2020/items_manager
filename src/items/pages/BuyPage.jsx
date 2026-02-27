@@ -1,13 +1,13 @@
 import { useAuthStore } from "@/auth/store/auth.store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useProductStore } from "../store/products.store";
+import { useCreateSale } from "../hooks/products.mutatios";
 
 const BuyPage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { user } = useAuthStore()
-  const { saveSale } = useProductStore()
+  const {mutateAsync: createSaleAsync} = useCreateSale()
 
   // Si el usuario llega sin estado, lo devolvemos a productos
   if (!state) {
@@ -35,11 +35,12 @@ const BuyPage = () => {
       payment_method: user.payment_method,
     }
 
-    const ok = await saveSale(saleData)
-
-    if (ok) {
+    try {
+      await createSaleAsync(saleData)
       navigate("/")
       toast.success("Su compra ha sido exitosa")
+    } catch (error) {
+      toast.error("Error al procesar la compra")
     }
 
   };

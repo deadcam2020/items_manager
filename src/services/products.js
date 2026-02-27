@@ -1,364 +1,132 @@
+import { Api } from "./api.js";
+import { uploadProductImageAction } from "./upload.services";
 
-const BASE_URL = import.meta.env.VITE_API_URL
 
+export const uploadProductFullAction = async ({ productData, file }) => {
+    // 1. Primero subimos la imagen
+    const uploadData = await uploadProductImageAction(file);
+
+    // 2. Construimos el objeto final con los datos que retornó Cloudinary
+    const finalProduct = {
+        ...productData,
+        imageurl: uploadData.imageurl,
+        imageid: uploadData.imageid,
+    };
+
+    // 3. Creamos el producto en la BD
+    return await createProductAction(finalProduct);
+};
 
 export const createProductAction = async (finalProduct) => {
-
-  const { title, description, price, category, imageurl, imageid, seller, stock, status } = finalProduct
-  const token = localStorage.getItem('token');
-
-
-  try {
-
-    const res = await fetch(`${BASE_URL}/api/products/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({ title, description, price, category, imageurl, imageid, seller, stock, status }),
-    })
-
-    if (!res) throw new Error;
-
-
-    const data = await res.json()
-
-    return data
-
-  } catch (error) {
-    console.log(error);
-
-  }
-
+    const { data } = await Api.post('/api/products/', finalProduct);
+    return data;
 
 };
 
 
 export const createSaleAction = async (saleData) => {
+    const { data } = await Api.post('/api/products/sale', saleData);
+    return data;
 
-  const token = localStorage.getItem('token');
-  
-  try {
-    const res = await fetch(`${BASE_URL}/api/products/sale`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(saleData),
-    })
-
-    if (!res) throw new Error;
-
-    const data = await res.json()
-    return data
-  } catch (error) {
-    console.log(error);
-
-  }
 };
-
 
 export const fetchUserProductsAction = async (uid) => {
+    const { data } = await Api.get(`/api/products/userProducts/${uid}`);
+    return data;
 
-  const token = localStorage.getItem('token')
-
-  const response = await fetch(`${BASE_URL}/api/products/userProducts/${uid}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Credenciales inválidas');
-  }
-
-  return await response.json();
 };
 
-
 export const fetchGetProductAction = async (id) => {
+    const { data } = await Api.get(`/api/products/product/${id}`);
+    return data;
 
-  const token = localStorage.getItem('token')
-
-  const response = await fetch(`${BASE_URL}/api/products/product/${id}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Error en fetchGetProductAction');
-  }
-
-  return response.json();
 };
 
 export const deleteProductAction = async (id) => {
+    const { data } = await Api.delete(`/api/products/deleteProduct/${id}`);
+    return data;
 
-  const token = localStorage.getItem('token')
-
-  const response = await fetch(`${BASE_URL}/api/products/deleteProduct/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Error en deleteProductAction');
-  }
-
-  return await response.json();
 };
 
+export const updateProductFullAction = async ({ id, productData, file, oldImageId }) => {
+    let finalProductData = { ...productData };
 
-export const updateProductAction = async ({ id, productData, oldImageId }) => {
-  const token = localStorage.getItem('token');
-  console.log("action: ", productData.stock);
-
-  const body = {
-    ...productData,
-    oldImageId   // <-- aquí va el public_id anterior
-  };
-
-  try {
-    const res = await fetch(`${BASE_URL}/api/products/update/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || 'Error al actualizar producto');
+    // 1. Si hay un archivo nuevo, lo subimos primero
+    if (file) {
+        const uploadData = await uploadProductImageAction(file);
+        finalProductData.imageurl = uploadData.imageurl;
+        finalProductData.imageid = uploadData.imageid;
+        finalProductData.oldImageId = oldImageId; // Para que el backend borre la imagen vieja
     }
 
-    return await res.json();
-  } catch (error) {
-    console.error('Error en updateProductAction:', error);
-    throw error;
-  }
+    // 2. Enviamos la actualización (con o sin imagen nueva)
+    // Usamos la acción de PUT que ya tenías convertida a Axios
+    return await updateProductAction({ id, productData: finalProductData });
 };
 
+export const updateProductAction = async ({ id, productData, oldImageId }) => {
+    const body = { ...productData, oldImageId };
+    const { data } = await Api.put(`/api/products/update/${id}`, body);
+    return data;
+};
 
 export const fetchGetAllUserProductsAction = async (id) => {
-  const token = localStorage.getItem('token');
+    const { data } = await Api.get(`/api/products/products/${id}`);
+    return data;
 
-  const response = await fetch(`${BASE_URL}/api/products/products/${id}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Error en fetchGetAllUserProductsAction');
-  }
-
-  return await response.json();
 };
 
 export const fetchGetAllProductsAction = async () => {
-  const token = localStorage.getItem('token');
+    const { data } = await Api.get('/api/admin/allProducts');
+    return data;
 
-  const response = await fetch(`${BASE_URL}/api/admin/allProducts`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Error en fetchGetProductAction');
-  }
-
-  return await response.json();
 };
 
-
-
 export const fetchUserPurchasedProductsAction = async (buyer_id) => {
+    const { data } = await Api.get(`/api/users/myPurchases/${buyer_id}`);
+    return data;
 
-  const token = localStorage.getItem('token')
-
-  const response = await fetch(`${BASE_URL}/api/users/myPurchases/${buyer_id}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Credenciales inválidas');
-  }
-
-  return await response.json();
 };
 
 export const searchproductsAction = async ({ query, min, max, status }) => {
+    const { data } = await Api.get('/api/products/search', {
+        params: { query, min, max, status } // Axios construye el ?query=... automáticamente
+    });
+    return data;
 
-  const token = localStorage.getItem('token');
-  console.log("status", status);
-
-  const response = await fetch(
-    `${BASE_URL}/api/products/search?query=${query}&min=${min}&max=${max}&status=${status}`,
-    {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Error al buscar productos');
-  }
-
-  return await response.json();
 };
 
 export const addToCartAction = async ({ id, uid, quantity }) => {
+    const { data } = await Api.post('/api/products/saveToCart', { id, uid, quantity });
+    return data;
 
-  const token = localStorage.getItem('token');
-
-  const response = await fetch(
-    `${BASE_URL}/api/products/saveToCart`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({id, uid, quantity})
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Error al buscar productos');
-  }
-
-  return await response.json();
 };
-
 
 export const getCartItems = async () => {
+    const { data } = await Api.get('/api/products/getCart');
+    return data;
 
-  
-  const token = localStorage.getItem('token');
-
-  const response = await fetch(
-    `${BASE_URL}/api/products/getCart`,
-    {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Error al buscar productos');
-  }
-
-  return await response.json();
 };
-
 
 export const deleteProductFromCartACtion = async (id) => {
-
-  
-  const token = localStorage.getItem('token');
-
-  const response = await fetch(
-    `${BASE_URL}/api/products/deleteFromCart/${id}`,
-    {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Error al buscar productos');
-  }
-
-  return await response.json();
+    const { data } = await Api.delete(`/api/products/deleteFromCart/${id}`);
+    return data;
 };
-
 
 export const addValorationAction = async ({ id, valoration }) => {
+    const { data } = await Api.post('/api/products/addValoration', { id, valoration });
+    return data;
 
-  const token = localStorage.getItem('token');
-
-  const response = await fetch(
-    `${BASE_URL}/api/products/addValoration`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({id, valoration})
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Error al buscar productos');
-  }
-
-  return await response.json();
 };
 
+// export const getCategoriesAction = async () => {
+//     const { data } = await Api.get('/api/admin/categories');
+//     return data;
 
-export const getCategoriesAction = async () => {
+// };
 
-  const token = localStorage.getItem('token');
+// export const getAdminHomeDataAction = async () => {
+//     const { data } = await Api.get('/api/admin/home_data');
+//     return data;
 
-  const response = await fetch(
-    `${BASE_URL}/api/admin/categories`,
-    {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Error al buscar productos');
-  }
-
-  return await response.json();
-};
-
-export const getAdminHomeDataAction = async () => {
-
-  const token = localStorage.getItem('token');
-
-  const response = await fetch(
-    `${BASE_URL}/api/admin/home_data`,
-    {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error('Error al buscar productos');
-  }
-
-  return await response.json();
-};
+// };

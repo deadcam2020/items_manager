@@ -7,7 +7,8 @@ import {
   deleteProductFromCartACtion, 
   addValorationAction, 
   uploadProductFullAction,
-  updateProductFullAction
+  updateProductFullAction,
+  deletecArtAction
 } from "@/services/products.services";
 
 
@@ -70,6 +71,16 @@ export const useDeleteFromCart = () => {
     mutationFn: deleteProductFromCartACtion,
     onSuccess: () => {
       queryClient.invalidateQueries(['cart', user.id]);
+    }
+  });
+};
+
+export const useDeleteCart = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deletecArtAction,
+    onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['cart'] });
     }
   });
 };

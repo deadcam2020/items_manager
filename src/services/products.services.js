@@ -113,6 +113,12 @@ export const deleteProductFromCartACtion = async (id) => {
     return data;
 };
 
+export const deletecArtAction = async (id) => {
+    const { data } = await Api.delete(`/api/products/delete_cart/${id}`);
+    return data;
+};
+
+
 export const addValorationAction = async ({ id, valoration }) => {
     const { data } = await Api.post('/api/products/addValoration', { id, valoration });
     return data;

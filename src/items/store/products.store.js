@@ -16,9 +16,7 @@ import {
   fetchGetProductAction,
   fetchUserProductsAction,
   fetchUserPurchasedProductsAction,
-  getAdminHomeDataAction,
   getCartItems,
-  getCategoriesAction,
   searchproductsAction,
   updateProductAction
 } from "@/services/products";
